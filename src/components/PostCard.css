@@ -1,0 +1,204 @@
+/* --- PostCard.css --- */
+
+/* Base Card Styles */
+.post-card {
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05); /* Shadow nhẹ */
+  transition: box-shadow 0.3s, transform 0.3s;
+  overflow: hidden;
+  cursor: pointer;
+  border: 1px solid #eee;
+}
+
+.post-card:hover {
+  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px); /* Hiệu ứng nâng nhẹ khi hover */
+}
+
+/* Media Container */
+.post-media-container {
+  position: relative;
+  height: 160px; /* Chiều cao ảnh vừa phải cho grid */
+  overflow: hidden;
+}
+
+.post-media {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s;
+}
+
+.post-card:hover .post-media-image {
+  transform: scale(1.05);
+}
+
+.post-media-video {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #333;
+  color: white;
+}
+
+/* Media Type Tag (Ảnh/Video) */
+.media-type-tag {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background-color: rgba(0, 0, 0, 0.6);
+  color: white;
+  font-size: 10px;
+  padding: 3px 8px;
+  border-radius: 15px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* Content Area */
+.post-content-area {
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* Location */
+.post-location {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: #008080; /* Màu xanh teal */
+  font-size: 12px;
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+
+.location-icon {
+  color: #008080;
+}
+
+/* Title */
+.post-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 8px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* Giới hạn 2 dòng */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Footer (Author & Actions) */
+.post-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.post-preview-text {
+  color: #444;
+  font-size: 13px;
+  line-height: 1.4;
+  white-space: pre-wrap;
+  word-break: break-word;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.post-actions-row {
+  display: flex;
+  gap: 12px;
+  padding-top: 8px;
+  border-top: 1px solid #f0f0f0;
+  margin-top: 8px;
+}
+
+/* Author Info */
+.post-author {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.author-avatar {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  object-fit: cover;
+  background-color: #ccc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #555;
+}
+
+.author-name {
+  font-size: 12px;
+  font-weight: 600;
+  color: #555;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 80px;
+}
+
+/* Actions (Like/Comment) */
+.post-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.action-button {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  background: none;
+  border: none;
+  color: #777;
+  cursor: pointer;
+  padding: 0;
+  transition: color 0.3s;
+}
+
+.action-button:hover {
+  color: #333;
+}
+
+.action-like:hover {
+  color: #e53e3e; /* Đỏ */
+}
+
+.action-like .action-icon {
+  color: #777;
+}
+
+.action-like.liked .action-icon,
+.action-like:hover .action-icon {
+  fill: #e53e3e;
+  color: #e53e3e;
+}
+
+.action-count {
+  font-size: 12px;
+  font-weight: 500;
+}
+
+/* Date/AI Tag */
+.post-date-tag {
+  font-size: 10px;
+  color: #999;
+  text-align: right;
+  margin-top: 4px;
+}
+
+.ai-tag {
+  color: #3182ce; /* Xanh dương */
+  font-weight: 600;
+}

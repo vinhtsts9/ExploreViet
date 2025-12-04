@@ -1,0 +1,132 @@
+/* --- Keyframes Animations --- */
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes pulse {
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* --- Main Layout --- */
+.app-container {
+  background-color: #f8fafc; /* Màu nền tương đương bg-slate-50 */
+  min-height: 100vh;
+  padding-bottom: 5rem; /* Để nội dung không bị che bởi nút FAB */
+}
+
+.main-content-wrapper {
+  max-width: 56rem; /* Tương đương max-w-4xl của Header */
+  margin-left: auto;
+  margin-right: auto;
+  padding: 1.5rem 1rem 0 1rem; /* padding-top để nội dung không bị dính */
+  margin-top: 0; /* remove negative margin so header doesn't overlap content */
+  position: relative;
+  z-index: 0;
+}
+
+.posts-grid {
+  display: grid;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+  gap: 1.5rem; /* gap-6 */
+}
+
+/* --- State Indicators --- */
+
+/* AI Searching Box */
+.ai-searching-box {
+  text-align: center;
+  padding: 2.5rem 0; /* py-10 */
+  background-color: white;
+  border-radius: 1rem; /* rounded-2xl */
+  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05); /* shadow-sm */
+  border: 1px solid #f3e8ff; /* border-purple-100 */
+  margin-bottom: 1.5rem; /* mb-6 */
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.ai-searching-box .icon {
+  margin: 0 auto 0.75rem auto; /* mx-auto mb-3 */
+  color: #a855f7; /* text-purple-500 */
+  width: 2.5rem; /* w-10 */
+  height: 2.5rem; /* h-10 */
+  animation: spin 1s linear infinite;
+}
+
+.ai-searching-box h3 {
+  font-size: 1.125rem; /* text-lg */
+  font-weight: 700; /* font-bold */
+  color: #1f2937; /* text-gray-800 */
+  margin: 0;
+}
+
+.ai-searching-box p {
+  color: #6b7280; /* text-gray-500 */
+  margin: 0.25rem 0 0 0;
+}
+
+/* General Loading Indicator */
+.loading-indicator {
+  display: flex;
+  justify-content: center;
+  padding: 2.5rem; /* p-10 */
+}
+
+.loading-indicator .icon {
+  animation: spin 1s linear infinite;
+  color: #0d9488; /* text-teal-600 */
+}
+
+/* No Posts Message */
+.no-posts-message {
+  text-align: center;
+  padding: 5rem 0; /* py-20 */
+  opacity: 0.5;
+}
+
+.no-posts-message .icon {
+  margin: 0 auto 1rem auto; /* mx-auto mb-4 */
+  color: #d1d5db; /* text-gray-300 */
+}
+
+/* --- Floating Action Button --- */
+.posts-grid {
+  display: grid;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+  gap: 1.5rem; /* gap-6 */
+}
+
+/* Nút Floating Action Button */
+.floating-add-button {
+  position: fixed;
+  bottom: 1.5rem; /* bottom-6 */
+  right: 1.5rem; /* right-6 */
+  background-color: #0d9488; /* bg-teal-600 */
+  color: white;
+  padding: 1rem; /* p-4 */
+  border-radius: 9999px; /* rounded-full */
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1); /* shadow-lg */
+  transition: background-color 0.2s, transform 0.2s;
+  border: none;
+  cursor: pointer;
+  z-index: 50;
+}
+
+.floating-add-button:hover {
+  background-color: #115e59; /* hover:bg-teal-700 */
+  transform: scale(1.1); /* hover:scale-110 */
+}
+
+/* --- Responsive --- */
+@media (min-width: 768px) {
+  /* md: */
+  .posts-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

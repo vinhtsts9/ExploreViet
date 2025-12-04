@@ -1,0 +1,6 @@
+/* Tùy chỉnh font Inter cho giao diện */
+body {
+  font-family: "Inter", sans-serif;
+  background-color: #f8fafc; /* Màu nền tương đương bg-slate-50 */
+  margin: 0; /* Reset margin mặc định của body */
+}
