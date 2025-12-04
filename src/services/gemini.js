@@ -5,7 +5,7 @@ export const fetchGeminiSuggestion = async (locationName) => {
     console.log(`🔍 Fetching AI suggestion for: "${locationName}"`);
 
     // Use n8n webhook endpoint directly
-    const apiUrl = import.meta.env.N8N_GEMINI_WEBHOOK_URL;
+    const apiUrl = import.meta.env.VITE_N8N_GEMINI_WEBHOOK_URL;
 
     const payload = {
       location: locationName,
