@@ -14,7 +14,6 @@ import {
   orderBy,
 } from "firebase/firestore";
 import { db } from "./firebase";
-import { apiPostAuth } from "../api";
 
 /**
  * Upload file to backend
@@ -23,14 +22,37 @@ import { apiPostAuth } from "../api";
  */
 export const uploadFileToBackend = async (file) => {
   try {
+    // Upload directly to Cloudinary using unsigned upload preset.
+    // Required env vars: VITE_CLOUDINARY_CLOUD_NAME and VITE_CLOUDINARY_UPLOAD_PRESET
+    const cloudName = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME;
+    const uploadPreset = import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET;
+
+    if (!cloudName || !uploadPreset) {
+      throw new Error(
+        "Cloudinary configuration missing. Set VITE_CLOUDINARY_CLOUD_NAME and VITE_CLOUDINARY_UPLOAD_PRESET in your .env"
+      );
+    }
+
+    const url = `https://api.cloudinary.com/v1_1/${cloudName}/auto/upload`;
     const formData = new FormData();
     formData.append("file", file);
+    formData.append("upload_preset", uploadPreset);
 
-    const response = await apiPostAuth("/posts/upload", formData);
-    if (response && response.data && response.data.url) {
-      return response.data.url;
+    const res = await fetch(url, {
+      method: "POST",
+      body: formData,
+    });
+
+    if (!res.ok) {
+      const errText = await res.text().catch(() => "");
+      throw new Error(`Cloudinary upload failed: ${res.status} ${errText}`);
     }
-    throw new Error("Phản hồi API không hợp lệ.");
+
+    const data = await res.json();
+    if (data && (data.secure_url || data.url)) {
+      return data.secure_url || data.url;
+    }
+    throw new Error("Cloudinary response missing URL");
   } catch (error) {
     console.error("Upload to backend failed:", error);
     throw new Error("Không thể upload file: " + error.message);
