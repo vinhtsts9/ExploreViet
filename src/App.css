@@ -1,0 +1,224 @@
+/* --- Keyframes Animations --- */
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes pulse {
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* --- Main Layout --- */
+.app-container {
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 50%, #e2e8f0 100%);
+  min-height: 100vh;
+  padding-bottom: 5rem; /* Để nội dung không bị che bởi nút FAB */
+  position: relative;
+}
+
+.app-container::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 20% 50%, rgba(13, 148, 136, 0.05) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(20, 184, 166, 0.05) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Main Layout with Sidebars */
+.main-layout {
+  display: flex;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 2rem 1rem 0 1rem;
+  gap: 1.5rem;
+  position: relative;
+  z-index: 1;
+}
+
+.main-content-wrapper {
+  flex: 1;
+  min-width: 0; /* Cho phép flex item co lại */
+  max-width: 56rem; /* Tương đương max-w-4xl của Header */
+  margin: 0 auto;
+  padding: 0;
+  position: relative;
+  z-index: 1;
+}
+
+.posts-grid {
+  display: grid;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+  gap: 1.5rem; /* gap-6 */
+}
+
+/* --- State Indicators --- */
+
+/* AI Searching Box */
+.ai-searching-box {
+  text-align: center;
+  padding: 3rem 2rem; /* py-10 */
+  background: linear-gradient(135deg, #ffffff 0%, #faf5ff 100%);
+  border-radius: 1.5rem; /* rounded-2xl */
+  box-shadow: 0 10px 25px -5px rgba(168, 85, 247, 0.15), 
+    0 8px 10px -6px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(168, 85, 247, 0.2);
+  margin-bottom: 1.5rem; /* mb-6 */
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  position: relative;
+  overflow: hidden;
+}
+
+.ai-searching-box::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(168, 85, 247, 0.1), transparent);
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  0% { left: -100%; }
+  100% { left: 100%; }
+}
+
+.ai-searching-box .icon {
+  margin: 0 auto 0.75rem auto; /* mx-auto mb-3 */
+  color: #a855f7; /* text-purple-500 */
+  width: 2.5rem; /* w-10 */
+  height: 2.5rem; /* h-10 */
+  animation: spin 1s linear infinite;
+}
+
+.ai-searching-box h3 {
+  font-size: 1.125rem; /* text-lg */
+  font-weight: 700; /* font-bold */
+  color: #1f2937; /* text-gray-800 */
+  margin: 0;
+}
+
+.ai-searching-box p {
+  color: #6b7280; /* text-gray-500 */
+  margin: 0.25rem 0 0 0;
+}
+
+/* General Loading Indicator */
+.loading-indicator {
+  display: flex;
+  justify-content: center;
+  padding: 2.5rem; /* p-10 */
+}
+
+.loading-indicator .icon {
+  animation: spin 1s linear infinite;
+  color: #0d9488; /* text-teal-600 */
+}
+
+/* No Posts Message */
+.no-posts-message {
+  text-align: center;
+  padding: 5rem 2rem; /* py-20 */
+  opacity: 0.7;
+}
+
+.no-posts-message .icon {
+  margin: 0 auto 1rem auto; /* mx-auto mb-4 */
+  color: #94a3b8;
+  opacity: 0.6;
+}
+
+.no-posts-message p {
+  color: #64748b;
+  font-size: 1.125rem;
+  margin-bottom: 1.5rem;
+}
+
+/* Page Header */
+.page-header {
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid rgba(13, 148, 136, 0.1);
+}
+
+.page-header h2 {
+  font-size: 1.875rem;
+  font-weight: 700;
+  color: #1f2937;
+  margin: 0 0 0.5rem 0;
+  background: linear-gradient(135deg, #0d9488 0%, #14b8a6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.page-header p {
+  color: #64748b;
+  font-size: 1rem;
+  margin: 0;
+}
+
+/* Create First Post Button */
+.create-first-post-button {
+  background: linear-gradient(135deg, #0d9488 0%, #14b8a6 100%);
+  color: white;
+  padding: 0.875rem 2rem;
+  border-radius: 12px;
+  border: none;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 6px -1px rgba(13, 148, 136, 0.3);
+}
+
+.create-first-post-button:hover {
+  background: linear-gradient(135deg, #14b8a6 0%, #2dd4bf 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px -2px rgba(13, 148, 136, 0.4);
+}
+
+/* --- Floating Action Button --- */
+.posts-grid {
+  display: grid;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+  gap: 1.5rem; /* gap-6 */
+}
+
+/* --- Responsive --- */
+@media (min-width: 768px) {
+  /* md: */
+  .posts-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 1024px) {
+  .main-layout {
+    gap: 1rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .main-layout {
+    flex-direction: column;
+    gap: 0;
+  }
+  
+  .main-content-wrapper {
+    width: 100%;
+  }
+}

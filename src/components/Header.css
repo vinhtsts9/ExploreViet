@@ -1,0 +1,785 @@
+/* ============================================
+   HEADER CONTAINER - Base Styles
+   ============================================ */
+.header-container {
+  background: linear-gradient(135deg, #0d9488 0%, #14b8a6 50%, #2dd4bf 100%);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 10px 25px -5px rgba(13, 148, 136, 0.3),
+    0 8px 10px -6px rgba(0, 0, 0, 0.1);
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: padding, border-radius, box-shadow;
+  transform: translateZ(0);
+  -webkit-font-smoothing: antialiased;
+  backface-visibility: hidden;
+}
+
+/* Normal state - Full header */
+.header-container {
+  padding: 1.25rem 1.5rem;
+  border-bottom-left-radius: 1.5rem;
+  border-bottom-right-radius: 1.5rem;
+}
+
+/* Compact state - Scrolled header */
+.header-container.scrolled {
+  padding: 0.625rem 1rem;
+  border-bottom-left-radius: 1rem;
+  border-bottom-right-radius: 1rem;
+  box-shadow: 0 4px 12px -2px rgba(13, 148, 136, 0.25),
+    0 2px 4px -2px rgba(0, 0, 0, 0.1);
+}
+
+/* ============================================
+   PHIÊN BẢN ĐẦY ĐỦ (Full Version)
+   ============================================ */
+.header-full {
+  width: 100%;
+}
+
+.header-full-layout {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 2rem;
+  align-items: start;
+  color: white;
+}
+
+/* Logo Section */
+.header-logo-section {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.header-logo {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: white;
+  margin: 0;
+  padding: 0;
+  text-decoration: none;
+}
+
+.header-logo:visited {
+  color: white;
+}
+
+.header-logo:hover {
+  transform: translateY(-2px);
+}
+
+.logo-icon {
+  color: #fde047;
+  flex-shrink: 0;
+  transition: transform 0.3s ease;
+}
+
+.header-logo:hover .logo-icon {
+  transform: rotate(15deg) scale(1.1);
+}
+
+.logo-text {
+  font-size: 1.5rem;
+  font-weight: 700;
+  white-space: nowrap;
+  transition: all 0.3s ease;
+}
+
+/* Center Section - Navigation (2 hàng) */
+.header-center-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  min-width: 0;
+  flex: 1;
+}
+
+/* Navigation Bar Full */
+.nav-bar-full {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: center;
+  padding: 0.875rem 1.5rem;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+/* Navigation Bar với 2 hàng - trong cùng 1 box */
+.nav-bar-two-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 1rem 1.5rem;
+}
+
+.nav-row-1,
+.nav-row-2 {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+.nav-bar-full::-webkit-scrollbar {
+  display: none;
+}
+
+.nav-btn-full {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0.75rem 1.25rem;
+  border-radius: 10px;
+  border: none;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 500;
+  font-size: 0.9375rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  flex-shrink: 0;
+  text-decoration: none;
+}
+
+.nav-btn-full:visited {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.nav-btn-full:hover {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  transform: translateY(-2px);
+}
+
+.nav-btn-full.active {
+  background: rgba(255, 255, 255, 0.3);
+  color: white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.nav-btn-full svg {
+  flex-shrink: 0;
+}
+
+/* Search Form Full - Moved to right section */
+.search-form-full {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  min-width: 280px;
+}
+
+.search-icon-full {
+  position: absolute;
+  left: 1.25rem;
+  color: rgba(0, 0, 0, 0.4);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.search-input-full {
+  width: 100%;
+  padding: 1rem 3.5rem 1rem 3.5rem;
+  border-radius: 14px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  color: #1f2937;
+  font-size: 1rem;
+  box-sizing: border-box;
+  transition: all 0.3s ease;
+}
+
+.search-input-full:focus {
+  outline: none;
+  border-color: rgba(255, 255, 255, 0.5);
+  background: white;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.clear-search-full {
+  position: absolute;
+  right: 1rem;
+  background: transparent;
+  border: none;
+  color: rgba(0, 0, 0, 0.4);
+  cursor: pointer;
+  padding: 0.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+}
+
+.clear-search-full:hover {
+  background: rgba(0, 0, 0, 0.1);
+  color: rgba(0, 0, 0, 0.6);
+}
+
+/* Right Section - Phần A (Weather + Profile) và Phần B (Search) */
+.header-right-section {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 1rem;
+  flex-shrink: 0;
+  min-width: 300px;
+}
+
+/* Phần A: Weather (trái) + Profile (phải) */
+.header-right-section-a {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+}
+
+/* Phần A - Weather (trái) */
+.weather-section-full {
+  flex: 1;
+  flex-shrink: 0;
+  display: flex;
+  justify-content: flex-start;
+}
+
+/* Phần A - User (phải) */
+.user-section-full {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-shrink: 0;
+}
+
+/* Phần B: Search */
+.header-right-section-b {
+  width: 100%;
+}
+
+.user-info-full {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.user-info-full .notification-bell-container {
+  margin-right: 0;
+}
+
+.user-avatar-full {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  cursor: pointer;
+  border: 2px solid rgba(255, 255, 255, 0.6);
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.user-avatar-full:hover {
+  transform: scale(1.1);
+  border-color: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 6px 12px -2px rgba(0, 0, 0, 0.15);
+}
+
+.user-dropdown-full {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  right: 0;
+  background: rgba(255, 255, 255, 0.98);
+  backdrop-filter: blur(10px);
+  border-radius: 0.75rem;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.15);
+  z-index: 20;
+  width: 150px;
+  overflow: hidden;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  animation: slideDown 0.2s ease-out;
+}
+
+.user-dropdown-full button {
+  display: block;
+  width: 100%;
+  padding: 0.75rem 1rem;
+  text-align: left;
+  color: #374151;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+}
+
+.user-dropdown-full button:hover {
+  background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+  color: #0d9488;
+}
+
+/* Admin link and logout button inside dropdowns */
+.user-dropdown-full .dropdown-link,
+.user-dropdown-compact .dropdown-link {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 0.75rem 1rem;
+  color: #374151;
+  text-decoration: none;
+  background: none;
+  border: none;
+  font-size: 0.95rem;
+}
+
+.user-dropdown-full .dropdown-link:hover,
+.user-dropdown-compact .dropdown-link:hover {
+  background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+  color: #0d9488;
+}
+
+.user-dropdown-full .dropdown-button,
+.user-dropdown-compact .dropdown-button {
+  display: block;
+  width: 100%;
+  padding: 0.75rem 1rem;
+  text-align: left;
+  color: #374151;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 0.95rem;
+}
+
+.user-dropdown-full .dropdown-button:hover,
+.user-dropdown-compact .dropdown-button:hover {
+  background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+  color: #0d9488;
+}
+
+/* Compact dropdown positioning */
+.user-dropdown-compact {
+  position: absolute;
+  top: calc(100% + 0.25rem);
+  right: 0;
+  background: rgba(255, 255, 255, 0.98);
+  backdrop-filter: blur(8px);
+  border-radius: 0.5rem;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
+  z-index: 20;
+  width: 160px;
+  overflow: hidden;
+  border: 1px solid rgba(0, 0, 0, 0.04);
+}
+
+.login-btn-full {
+  padding: 0.625rem 1.25rem;
+  border-radius: 10px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  color: white;
+  font-weight: 500;
+  font-size: 0.9375rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.login-btn-full:visited {
+  color: white;
+}
+
+.login-btn-full:hover {
+  background: rgba(255, 255, 255, 0.25);
+  border-color: rgba(255, 255, 255, 0.5);
+  transform: translateY(-2px);
+}
+
+/* ============================================
+   PHIÊN BẢN COMPACT (Compact Version)
+   ============================================ */
+.header-compact {
+  width: 100%;
+}
+
+.header-compact-layout {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  animation: slideDown 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Logo Compact */
+.logo-compact {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  border-radius: 10px;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+  text-decoration: none;
+  color: white;
+}
+
+.logo-compact:visited {
+  color: white;
+}
+
+.logo-compact:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: scale(1.1);
+}
+
+.logo-icon-compact {
+  color: #fde047;
+}
+
+/* Navigation Compact - Chỉ icon */
+.nav-bar-compact {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  flex: 1;
+  justify-content: center;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.nav-bar-compact::-webkit-scrollbar {
+  display: none;
+}
+
+.nav-btn-compact {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  border: none;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.9);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+  position: relative;
+  text-decoration: none;
+}
+
+.nav-btn-compact:visited {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.nav-btn-compact:hover {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  transform: translateY(-2px);
+}
+
+.nav-btn-compact.active {
+  background: rgba(255, 255, 255, 0.3);
+  color: white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.nav-btn-compact.active::after {
+  content: "";
+  position: absolute;
+  bottom: 4px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 4px;
+  height: 4px;
+  background: white;
+  border-radius: 50%;
+}
+
+/* Search Compact */
+.search-form-compact {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-width: 180px;
+  max-width: 250px;
+  flex-shrink: 0;
+}
+
+.search-icon-compact {
+  position: absolute;
+  left: 0.75rem;
+  color: rgba(0, 0, 0, 0.4);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.search-input-compact {
+  width: 100%;
+  padding: 0.5rem 2.5rem 0.5rem 2.25rem;
+  border-radius: 10px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  color: #1f2937;
+  font-size: 0.875rem;
+  box-sizing: border-box;
+  transition: all 0.3s ease;
+}
+
+.search-input-compact:focus {
+  outline: none;
+  border-color: rgba(255, 255, 255, 0.5);
+  background: white;
+}
+
+.clear-search-compact {
+  position: absolute;
+  right: 0.5rem;
+  background: transparent;
+  border: none;
+  color: rgba(0, 0, 0, 0.4);
+  cursor: pointer;
+  padding: 0.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+}
+
+.clear-search-compact:hover {
+  background: rgba(0, 0, 0, 0.1);
+  color: rgba(0, 0, 0, 0.6);
+}
+
+/* Weather Compact */
+.weather-compact {
+  flex-shrink: 0;
+}
+
+/* User Compact */
+.user-compact {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.user-info-compact {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.user-info-compact .notification-bell-container {
+  margin-right: 0.25rem;
+}
+
+.user-avatar-compact {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  cursor: pointer;
+  border: 2px solid rgba(255, 255, 255, 0.6);
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.1);
+}
+
+.user-avatar-compact:hover {
+  transform: scale(1.1);
+  border-color: rgba(255, 255, 255, 0.9);
+}
+
+.user-dropdown-compact {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  right: 0;
+  background: rgba(255, 255, 255, 0.98);
+  backdrop-filter: blur(10px);
+  border-radius: 0.75rem;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.15);
+  z-index: 20;
+  width: 150px;
+  overflow: hidden;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  animation: slideDown 0.2s ease-out;
+}
+
+.user-dropdown-compact button {
+  display: block;
+  width: 100%;
+  padding: 0.75rem 1rem;
+  text-align: left;
+  color: #374151;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+}
+
+.user-dropdown-compact button:hover {
+  background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+  color: #0d9488;
+}
+
+.login-btn-compact {
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border-radius: 8px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  color: white;
+  font-weight: 500;
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+}
+
+.login-btn-compact:visited {
+  color: white;
+}
+
+.login-btn-compact:hover {
+  background: rgba(255, 255, 255, 0.25);
+  border-color: rgba(255, 255, 255, 0.5);
+  transform: translateY(-2px);
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+@media (max-width: 1024px) {
+  .header-full-layout {
+    gap: 1.5rem;
+  }
+
+  .nav-bar-full {
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+  }
+
+  .nav-btn-full {
+    padding: 0.625rem 1rem;
+    font-size: 0.875rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .header-container {
+    padding: 1rem 1rem;
+  }
+
+  .header-container.scrolled {
+    padding: 0.5rem 0.75rem;
+  }
+
+  .header-full-layout {
+    gap: 1rem;
+  }
+
+  .logo-text {
+    font-size: 1.25rem;
+  }
+
+  .nav-bar-full {
+    gap: 0.375rem;
+    padding: 0.625rem 0.75rem;
+  }
+
+  .nav-btn-full {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.8125rem;
+    gap: 0.5rem;
+  }
+
+  .nav-btn-full span {
+    display: none; /* Ẩn text trên mobile */
+  }
+
+  .search-input-full {
+    padding: 0.875rem 3rem 0.875rem 3rem;
+    font-size: 0.9375rem;
+  }
+
+  .header-compact-layout {
+    gap: 0.5rem;
+  }
+
+  .search-form-compact {
+    min-width: 120px;
+    max-width: 180px;
+  }
+}
+
+@media (max-width: 640px) {
+  .header-full-layout {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .header-center-section {
+    order: 2;
+  }
+
+  .header-logo-section {
+    order: 1;
+  }
+
+  .header-right-section {
+    order: 3;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .search-form-compact {
+    min-width: 100px;
+    max-width: 150px;
+  }
+
+  .search-input-compact {
+    font-size: 0.8125rem;
+    padding: 0.5rem 2rem 0.5rem 2rem;
+  }
+}

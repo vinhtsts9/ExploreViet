@@ -1,0 +1,160 @@
+.itinerary-list-page {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.itinerary-list-page .page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  flex-wrap: wrap;
+}
+
+.itinerary-list-page .page-header h2 {
+  font-size: 2.5rem;
+  color: var(--text-color);
+  margin-bottom: 5px;
+}
+
+.itinerary-list-page .page-header p {
+  color: var(--text-secondary-color);
+  font-size: 1rem;
+  max-width: 600px;
+}
+
+.itinerary-list-page .create-new-itinerary-button {
+  background-color: var(--primary-button-background);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.itinerary-list-page .create-new-itinerary-button:hover {
+  background-color: var(--primary-button-hover-background);
+}
+
+.itinerary-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.itinerary-card {
+  background-color: var(--card-background);
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: var(--card-shadow);
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+}
+
+.itinerary-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--card-hover-shadow);
+}
+
+.itinerary-card h3 {
+  font-size: 1.5rem;
+  color: var(--text-color);
+  margin-bottom: 10px;
+}
+
+.itinerary-card p {
+  color: var(--text-secondary-color);
+  font-size: 0.95rem;
+  margin-bottom: 15px;
+  flex-grow: 1;
+}
+
+.itinerary-card .itinerary-date {
+  font-size: 0.85rem;
+  color: var(--text-tertiary-color);
+  margin-top: auto;
+}
+
+.itinerary-card-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 15px;
+}
+
+.itinerary-card .delete-itinerary-button {
+  background-color: var(--button-danger-background);
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.itinerary-card .delete-itinerary-button:hover {
+  background-color: var(--button-danger-hover-background);
+}
+
+.no-itineraries-message {
+  text-align: center;
+  padding: 50px 20px;
+  background-color: var(--background-light);
+  border-radius: 12px;
+  margin-top: 30px;
+  color: var(--text-secondary-color);
+}
+
+.no-itineraries-message .icon {
+  color: var(--primary-color);
+  margin-bottom: 20px;
+}
+
+.no-itineraries-message p {
+  font-size: 1.1rem;
+  margin-bottom: 20px;
+}
+
+.no-itineraries-message .create-first-itinerary-button {
+  background-color: var(--primary-button-background);
+  color: white;
+  border: none;
+  padding: 12px 25px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.no-itineraries-message .create-first-itinerary-button:hover {
+  background-color: var(--primary-button-hover-background);
+}
+
+.itinerary-list-page .loading-indicator {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+  color: var(--text-secondary-color);
+}
+
+.itinerary-list-page .loading-indicator .icon {
+  animation: spin 1s linear infinite;
+  color: var(--primary-color);
+  margin-bottom: 10px;
+}
+

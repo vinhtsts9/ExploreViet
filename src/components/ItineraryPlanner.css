@@ -1,0 +1,295 @@
+.itinerary-planner-page {
+  padding: 20px;
+  background-color: #f4f7f6;
+  min-height: 100vh;
+  font-family: "Inter", sans-serif;
+}
+
+.itinerary-header {
+  margin-bottom: 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.itinerary-header-content {
+}
+
+.itinerary-header h1 {
+  font-size: 2.5rem;
+  color: #2c3e50;
+}
+
+.itinerary-header p {
+  font-size: 1.1rem;
+  color: #7f8c8d;
+}
+
+.itinerary-header-actions {
+  flex-shrink: 0;
+  margin-left: 24px;
+}
+
+.save-plan-button {
+  padding: 10px 20px;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background-color: #27ae60;
+  color: white;
+}
+
+.save-plan-button:disabled {
+  background-color: #bdc3c7;
+  color: #7f8c8d;
+  cursor: not-allowed;
+}
+
+.itinerary-container {
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+}
+
+.days-container {
+  display: flex;
+  gap: 16px;
+  flex-grow: 1;
+  overflow-x: auto;
+  padding-bottom: 16px;
+}
+
+/* Wishlist Column */
+.wishlist-column {
+  width: 320px;
+  flex-shrink: 0;
+  background-color: #ffffff;
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  height: fit-content;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.wishlist-column h3 {
+  margin-top: 0;
+  color: #34495e;
+  border-bottom: 2px solid #e0e0e0;
+  padding-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Day Column */
+.day-column {
+  width: 320px;
+  flex-shrink: 0;
+  background-color: #ffffff;
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  min-height: 300px;
+  transition: background-color 0.2s ease;
+}
+
+.day-column.over {
+  background-color: #e8f4ff; /* Highlight when dragging over */
+}
+
+.day-column h3 {
+  margin-top: 0;
+  color: #2980b9;
+  border-bottom: 2px solid #e0e0e0;
+  padding-bottom: 8px;
+}
+
+.day-items-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+/* Itinerary Item */
+.itinerary-item {
+  padding: 12px 16px;
+  background-color: #ecf0f1;
+  border: 1px solid #bdc3c7;
+  border-radius: 8px;
+  cursor: grab;
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.itinerary-item:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.itinerary-item.dragging {
+  opacity: 0.8;
+  transform: scale(1.03);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+}
+
+.item-content {
+  flex-grow: 1;
+}
+
+.itinerary-item h4 {
+  margin: 0 0 4px 0;
+  font-size: 1rem;
+  color: #2c3e50;
+}
+
+.itinerary-item p {
+  margin: 0;
+  font-size: 0.85rem;
+  color: #7f8c8d;
+}
+
+.item-time {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.9rem;
+  color: #34495e;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: background-color 0.2s;
+}
+
+.item-time:hover {
+  background-color: #e0e0e0;
+}
+
+.time-editor {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.time-editor input[type="time"] {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 2px 4px;
+  font-size: 0.9rem;
+  width: 80px;
+}
+
+.time-display {
+  padding: 4px; /* Thêm padding để dễ click hơn */
+  min-width: 50px; /* Đảm bảo khu vực click đủ rộng */
+}
+
+.time-input-direct {
+  border: 1px solid transparent;
+  border-radius: 4px;
+  padding: 2px 4px;
+  font-size: 0.9rem;
+  width: 80px;
+  background-color: transparent;
+}
+
+.time-edit-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 50%;
+  transition: background-color 0.2s;
+}
+
+.time-edit-btn.save {
+  color: #27ae60;
+}
+.time-edit-btn.save:hover {
+  background-color: #e8f8ef;
+}
+
+.time-edit-btn.cancel {
+  color: #c0392b;
+}
+.time-edit-btn.cancel:hover {
+  background-color: #fbeee;
+}
+
+.add-day-column {
+  width: 200px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.add-day-button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 20px;
+  border: 2px dashed #bdc3c7;
+  border-radius: 12px;
+  background-color: transparent;
+  color: #7f8c8d;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.add-day-button:hover {
+  background-color: #ecf0f1;
+  color: #2c3e50;
+  border-color: #95a5a6;
+}
+
+.day-action-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #7f8c8d;
+  padding: 4px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.day-action-btn:hover {
+  background-color: #f0f0f0;
+  color: #2c3e50;
+}
+
+.day-action-btn.delete:hover {
+  background-color: #fbeee;
+  color: #c0392b;
+}
+
+.day-column-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px solid #e0e0e0;
+  padding-bottom: 8px;
+}
+
+.day-column-actions {
+  display: flex;
+  gap: 4px;
+}
+
+.day-column-header h3 {
+  margin: 0;
+  color: #2980b9;
+}

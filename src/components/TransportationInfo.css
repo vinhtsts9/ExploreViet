@@ -1,0 +1,179 @@
+.transportation-info-container {
+  background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+  border-radius: 16px;
+  padding: 1.5rem;
+  margin: 2rem 0;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+}
+
+.transportation-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid rgba(13, 148, 136, 0.1);
+}
+
+.transportation-header h3 {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #1f2937;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.transportation-section {
+  margin-bottom: 1rem;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 12px;
+  overflow: hidden;
+  background: white;
+}
+
+.transportation-section-header {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 1.25rem;
+  background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%);
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #374151;
+  text-align: left;
+}
+
+.transportation-section-header:hover {
+  background: linear-gradient(135deg, #f1f5f9 0%, #f8fafc 100%);
+}
+
+.transportation-section-header .expand-icon {
+  margin-left: auto;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #0d9488;
+}
+
+.transportation-section-content {
+  padding: 1rem;
+  background: white;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.transportation-card {
+  padding: 1rem;
+  margin-bottom: 0.75rem;
+  background: linear-gradient(135deg, #fafbfc 0%, #ffffff 100%);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.transportation-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  border-color: rgba(13, 148, 136, 0.3);
+}
+
+.transportation-card:last-child {
+  margin-bottom: 0;
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.card-title {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.card-title strong {
+  color: #1f2937;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.card-subtitle {
+  color: #6b7280;
+  font-size: 0.85rem;
+}
+
+.card-info {
+  margin: 0.5rem 0 0 0;
+  color: #6b7280;
+  font-size: 0.875rem;
+}
+
+.card-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #0d9488;
+  text-decoration: none;
+  font-size: 0.875rem;
+  margin-top: 0.5rem;
+  transition: color 0.3s ease;
+}
+
+.card-link:hover {
+  color: #14b8a6;
+}
+
+.transportation-loading,
+.transportation-error,
+.transportation-empty {
+  text-align: center;
+  padding: 2rem;
+  color: #6b7280;
+}
+
+.transportation-loading .spinner {
+  animation: spin 1s linear infinite;
+  margin-bottom: 1rem;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.transportation-section-content::-webkit-scrollbar {
+  width: 6px;
+}
+
+.transportation-section-content::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 3px;
+}
+
+.transportation-section-content::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 3px;
+}
+
+.transportation-section-content::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+
+
+
