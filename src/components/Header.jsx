@@ -131,7 +131,7 @@ const Header = ({
             <div className="header-logo-section">
               <Link to="/" className="header-logo">
                 <Sparkles className="logo-icon" size={28} />
-                <span className="logo-text">Vietnam Travel</span>
+                <span className="logo-text">ExploreViet</span>
               </Link>
             </div>
 

@@ -568,26 +568,21 @@ const PostDetail = ({ post, onBack, onLike, currentUserId, currentUser, posts = 
         )}
 
         {/* ============================================== */}
-        {/* LƯỢT THÍCH VÀ BÌNH LUẬN (Đã di chuyển xuống cuối) */}
+        {/* LƯỢT THÍCH VÀ BÌNH LUẬN - Facebook Style */}
         {/* ============================================== */}
         <div className="interaction-section">
           {/* Stats - Hiển thị số lượt thích và bình luận */}
           {(post.likes > 0 || comments.length > 0) && (
             <div className="detail-stats">
               {post.likes > 0 && (
-                <div className="stat-item">
-                  <Heart
-                    size={14}
-                    className={isLiked ? "stat-icon liked" : "stat-icon"}
-                  />
-                  <span>{post.likes} lượt thích</span>
-                </div>
+                <span className="stat-text">
+                  {post.likes} lượt thích
+                </span>
               )}
               {comments.length > 0 && (
-                <div className="stat-item">
-                  <MessageCircle size={14} className="stat-icon" />
-                  <span>{comments.length} bình luận</span>
-                </div>
+                <span className="stat-text">
+                  {comments.length} bình luận
+                </span>
               )}
             </div>
           )}
@@ -595,14 +590,14 @@ const PostDetail = ({ post, onBack, onLike, currentUserId, currentUser, posts = 
           {/* Divider */}
           <div className="interaction-divider"></div>
 
-          {/* Action Buttons - Giống Facebook */}
+          {/* Action Buttons - Facebook Style */}
           <div className="action-buttons-row">
             <button
               onClick={handleLike}
               className={`action-button action-like-btn ${isLiked ? "liked" : ""}`}
             >
               <Heart
-                size={20}
+                size={18}
                 className={isLiked ? "heart-icon liked" : "heart-icon"}
               />
               <span>{isLiked ? "Bỏ thích" : "Thích"}</span>
@@ -614,7 +609,7 @@ const PostDetail = ({ post, onBack, onLike, currentUserId, currentUser, posts = 
                 document.querySelector('.comment-input')?.focus();
               }}
             >
-              <MessageCircle size={20} className="action-icon" />
+              <MessageCircle size={18} className="action-icon" />
               <span>Bình luận</span>
             </button>
           </div>

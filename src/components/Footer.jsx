@@ -83,7 +83,7 @@ const Footer = () => {
       content: (
         <div>
           <p>
-            <strong>Vietnam Travel</strong> là nền tảng du lịch trực tuyến được xây dựng với mục tiêu 
+            <strong>ExploreViet</strong> là nền tảng du lịch trực tuyến được xây dựng với mục tiêu 
             quảng bá và giới thiệu vẻ đẹp của đất nước Việt Nam đến với du khách trong và ngoài nước.
           </p>
           <p>
@@ -300,7 +300,7 @@ const Footer = () => {
             <div className="footer-brand">
               <Sparkles className="footer-logo-icon" size={24} />
               <div>
-                <h3 className="footer-title">Vietnam Travel</h3>
+                <h3 className="footer-title">ExploreViet</h3>
                 <p className="footer-tagline">Khám phá vẻ đẹp Việt Nam</p>
               </div>
             </div>
@@ -358,7 +358,7 @@ const Footer = () => {
 
           <div className="footer-bottom">
             <p>
-              © {new Date().getFullYear()} Vietnam Travel. Tất cả quyền được bảo lưu.
+              © {new Date().getFullYear()} ExploreViet. Tất cả quyền được bảo lưu.
             </p>
             <p className="footer-team-credit">
               Phát triển bởi: {teamMembers.map(m => m.name).join(", ")}
