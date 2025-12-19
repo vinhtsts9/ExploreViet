@@ -15,6 +15,7 @@ import Header from "./components/Header";
 import PostCard from "./components/PostCard";
 import Login from "./components/Login";
 import CreatePost from "./components/CreatePost";
+import EditPost from "./components/EditPost";
 import PostDetail from "./components/PostDetail";
 import Filter from "./components/Filter";
 import Footer from "./components/Footer";
@@ -79,8 +80,49 @@ function ItineraryPlannerWrapper({ user, navigate }) {
   );
 }
 
+// Wrapper component for EditPost to get postId from URL
+function EditPostWrapper({ posts, user, onUpdatePost, onCancelEdit, navigate }) {
+  const { id } = useParams();
+  const post = posts.find((p) => p && p.id === id);
+  
+  if (!post) {
+    return (
+      <div className="main-content-wrapper">
+        <div className="page-header">
+          <h2>Bài viết không tìm thấy</h2>
+          <button onClick={() => navigate("/")} className="create-first-post-button">
+            Về trang chủ
+          </button>
+        </div>
+      </div>
+    );
+  }
+  
+  if (post.userId !== user?.uid) {
+    return (
+      <div className="main-content-wrapper">
+        <div className="page-header">
+          <h2>Bạn không có quyền chỉnh sửa bài viết này</h2>
+          <button onClick={() => navigate(-1)} className="create-first-post-button">
+            Quay lại
+          </button>
+        </div>
+      </div>
+    );
+  }
+  
+  return (
+    <EditPost
+      post={post}
+      user={user}
+      onUpdatePost={onUpdatePost}
+      onCancel={onCancelEdit}
+    />
+  );
+}
+
 // Wrapper component for PostDetail to get postId from URL
-function PostDetailWrapper({ posts, user, onLike, onPostClick, onDeletePost }) {
+function PostDetailWrapper({ posts, user, onLike, onPostClick, onDeletePost, onEditPost }) {
   const { id } = useParams();
   const navigate = useNavigate();
   const [post, setPost] = useState(null);
@@ -251,6 +293,7 @@ function PostDetailWrapper({ posts, user, onLike, onPostClick, onDeletePost }) {
         posts={Array.isArray(posts) ? posts : []}
         onPostClick={onPostClick}
         onDelete={onDeletePost}
+        onEdit={onEditPost}
       />
     </PostDetailErrorBoundary>
   );
@@ -306,6 +349,7 @@ function AppContent() {
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [isSearchingAi, setIsSearchingAi] = useState(false);
+  const [editingPost, setEditingPost] = useState(null);
   const [filters, setFilters] = useState({
     province: "",
     category: "",
@@ -547,6 +591,11 @@ function AppContent() {
       });
     }
 
+    // Category filter
+    if (filters.category) {
+      filtered = filtered.filter((p) => p.category === filters.category);
+    }
+
     // Rating filter
     if (filters.minRating > 0) {
       filtered = filtered.filter((p) => (p.rating || 0) >= filters.minRating);
@@ -572,6 +621,21 @@ function AppContent() {
     }
 
     return filtered;
+  };
+
+  const handleEditPost = (post) => {
+    setEditingPost(post);
+    navigate(`/edit/${post.id}`);
+  };
+
+  const handleUpdatePost = async () => {
+    setEditingPost(null);
+    navigate(-1); // Quay lại trang trước
+  };
+
+  const handleCancelEdit = () => {
+    setEditingPost(null);
+    navigate(-1);
   };
 
   const handleCreatePost = async (postData) => {
@@ -626,6 +690,7 @@ function AppContent() {
               {/* Left Sidebar */}
               <LeftSidebar
                 posts={posts}
+                activeCategory={filters.category}
                 onFilterClick={(filter) => {
                   if (typeof filter === "string") {
                     setFilters((prev) => ({ ...prev, category: filter }));
@@ -664,6 +729,7 @@ function AppContent() {
                         currentUserId={user?.uid}
                         currentUser={user}
                         onDelete={handleDeletePost}
+                        onEdit={handleEditPost}
                         onClick={() => handlePostClick(post)}
                       />
                     ))}
@@ -700,7 +766,33 @@ function AppContent() {
               onLike={handleLike}
               onPostClick={handlePostClick}
               onDeletePost={handleDeletePost}
+              onEditPost={handleEditPost}
             />
+          }
+        />
+
+        {/* Edit Post Page */}
+        <Route
+          path="/edit/:id"
+          element={
+            user ? (
+              <EditPostWrapper
+                posts={posts}
+                user={user}
+                onUpdatePost={handleUpdatePost}
+                onCancelEdit={handleCancelEdit}
+                navigate={navigate}
+              />
+            ) : (
+              <div className="main-content-wrapper">
+                <div className="page-header">
+                  <h2>Bạn cần đăng nhập</h2>
+                  <button onClick={() => navigate("/login")} className="create-first-post-button">
+                    Đăng nhập
+                  </button>
+                </div>
+              </div>
+            )
           }
         />
 
@@ -758,6 +850,7 @@ function AppContent() {
                           currentUserId={user?.uid}
                           currentUser={user}
                           onDelete={handleDeletePost}
+                          onEdit={handleEditPost}
                           onClick={() => handlePostClick(post)}
                         />
                       ))}

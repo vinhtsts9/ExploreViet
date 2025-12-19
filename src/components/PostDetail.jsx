@@ -14,6 +14,7 @@ import {
   Trash2,
   Reply,
   ThumbsUp,
+  Edit,
 } from "lucide-react";
 import WishlistButton from "./WishlistButton";
 import MapForLocation from "./MapForLocation";
@@ -413,6 +414,17 @@ const PostDetail = ({ post, onBack, onLike, currentUserId, currentUser, posts = 
                 </button>
                 {showMenu && (
                   <div className="post-detail-menu-dropdown">
+                    <button
+                      className="post-detail-menu-item"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setShowMenu(false);
+                        onEdit && onEdit(post);
+                      }}
+                    >
+                      <Edit size={16} />
+                      <span>Chỉnh sửa</span>
+                    </button>
                     <button
                       className="post-detail-menu-item delete-item"
                       onClick={handleDelete}

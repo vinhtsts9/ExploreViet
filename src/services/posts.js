@@ -116,6 +116,7 @@ export const createPost = async (
     location,
     location_lowercase: location.toLowerCase(),
     content: firestoreContents,
+    category: postData.category || "",
     userId,
     userName: user?.displayName || "Anonymous",
     userPhotoURL: user?.photoURL || null,

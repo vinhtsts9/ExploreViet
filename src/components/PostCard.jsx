@@ -8,6 +8,7 @@ import {
   User,
   MoreVertical,
   Trash2,
+  Edit,
 } from "lucide-react";
 import Rating from "./Rating";
 import WishlistButton from "./WishlistButton";
@@ -34,7 +35,7 @@ const formatTimeAgo = (date) => {
   return postDate.toLocaleDateString("vi-VN");
 };
 
-const PostCard = ({ post, onLike, onClick, currentUserId, currentUser, onDelete }) => {
+const PostCard = ({ post, onLike, onClick, currentUserId, currentUser, onDelete, onEdit }) => {
   const [showMenu, setShowMenu] = useState(false);
   const menuRef = useRef(null);
 
@@ -123,6 +124,17 @@ const PostCard = ({ post, onLike, onClick, currentUserId, currentUser, onDelete 
             </button>
             {showMenu && (
               <div className="post-menu-dropdown">
+                <button
+                  className="post-menu-item"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setShowMenu(false);
+                    onEdit && onEdit(post);
+                  }}
+                >
+                  <Edit size={16} />
+                  <span>Chỉnh sửa</span>
+                </button>
                 <button
                   className="post-menu-item delete-item"
                   onClick={handleDelete}

@@ -2,7 +2,7 @@ import React from "react";
 import { TrendingUp, Filter, Tag, MapPin, Sparkles } from "lucide-react";
 import "./LeftSidebar.css";
 
-const LeftSidebar = ({ posts, onFilterClick, onTagClick }) => {
+const LeftSidebar = ({ posts, onFilterClick, onTagClick, activeCategory = "" }) => {
   // Tính toán trending destinations từ posts
   const getTrendingDestinations = () => {
     const locationCounts = {};
@@ -87,7 +87,7 @@ const LeftSidebar = ({ posts, onFilterClick, onTagClick }) => {
             {quickFilters.map((filter) => (
               <button
                 key={filter.id}
-                className="quick-filter-btn"
+                className={`quick-filter-btn ${activeCategory === filter.id ? "active" : ""}`}
                 onClick={() => onFilterClick && onFilterClick(filter.id)}
               >
                 <span className="filter-icon">{filter.icon}</span>

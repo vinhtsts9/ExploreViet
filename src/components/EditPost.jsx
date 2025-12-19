@@ -1,25 +1,59 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Image as ImageIcon,
   Type,
   Video,
   Youtube,
-  Trash2,
   ArrowUp,
   ArrowDown,
   Loader2,
+  Trash2,
 } from "lucide-react";
 import "./CreatePost.css";
 import imageCompression from "browser-image-compression";
-import { uploadFileToBackend } from "../services/posts";
+import { uploadFileToBackend, updatePost } from "../services/posts";
 
-const CreatePost = ({ user, onCreatePost, onCancel }) => {
-  const [title, setTitle] = useState("");
-  const [location, setLocation] = useState("");
-  const [category, setCategory] = useState("");
-  const [blocks, setBlocks] = useState([{ type: "text", content: "" }]);
+const EditPost = ({ post, user, onUpdatePost, onCancel }) => {
+  const [title, setTitle] = useState(post?.title || "");
+  const [location, setLocation] = useState(post?.location || "");
+  const [category, setCategory] = useState(post?.category || "");
+  const [blocks, setBlocks] = useState([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [uploadingStates, setUploadingStates] = useState({});
+
+  // Load post data into form
+  useEffect(() => {
+    if (post) {
+      setTitle(post.title || "");
+      setLocation(post.location || "");
+      setCategory(post.category || "");
+      
+      // Convert post content to blocks format
+      if (post.content && Array.isArray(post.content)) {
+        const convertedBlocks = post.content.map((block) => {
+          if (block.type === "text") {
+            return { type: "text", content: block.content || "" };
+          } else if (block.type === "youtube") {
+            return {
+              type: "youtube",
+              url: block.url || "",
+              videoId: block.videoId || "",
+              caption: block.caption || "",
+            };
+          } else {
+            return {
+              type: block.type,
+              url: block.url || "",
+              caption: block.caption || "",
+            };
+          }
+        });
+        setBlocks(convertedBlocks.length > 0 ? convertedBlocks : [{ type: "text", content: "" }]);
+      } else {
+        setBlocks([{ type: "text", content: "" }]);
+      }
+    }
+  }, [post]);
 
   const categories = [
     { value: "", label: "Chọn loại địa điểm" },
@@ -35,7 +69,6 @@ const CreatePost = ({ user, onCreatePost, onCancel }) => {
   const extractYouTubeId = (url) => {
     if (!url) return null;
     
-    // Handle various YouTube URL formats
     const patterns = [
       /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/|youtube\.com\/v\/)([^&\n?#]+)/,
       /youtube\.com\/watch\?.*v=([^&\n?#]+)/,
@@ -70,7 +103,6 @@ const CreatePost = ({ user, onCreatePost, onCancel }) => {
     } else if (current.type === "youtube") {
       if (newContent.url !== undefined) {
         current.url = newContent.url;
-        // Auto-extract video ID when URL changes
         const videoId = extractYouTubeId(newContent.url);
         current.videoId = videoId || "";
       }
@@ -154,30 +186,54 @@ const CreatePost = ({ user, onCreatePost, onCancel }) => {
       return;
     }
 
-    const backendContents = blocks.map((block) => {
+    if (!post?.id) {
+      alert("Không tìm thấy bài viết để cập nhật.");
+      return;
+    }
+
+    // Transform blocks to Firestore format
+    const firestoreContents = blocks.map((block) => {
       if (block.type === "text") {
-        return { type: "text", value: block.content };
+        return {
+          type: "text",
+          content: block.content,
+        };
       } else if (block.type === "youtube") {
         if (!block.url || !block.videoId) {
           throw new Error("Bạn phải nhập URL YouTube hợp lệ.");
         }
-        return { 
-          type: "youtube", 
-          value: block.url, 
+        return {
+          type: "youtube",
+          url: block.url,
           videoId: block.videoId,
-          caption: block.caption 
+          caption: block.caption || "",
         };
       } else {
         if (!block.url) throw new Error("Bạn phải upload toàn bộ ảnh/video.");
-        return { type: block.type, value: block.url, caption: block.caption };
+        return {
+          type: block.type,
+          url: block.url,
+          caption: block.caption || "",
+        };
       }
     });
 
     setIsSubmitting(true);
     try {
-      await onCreatePost({ title, location, category, contents: backendContents });
+      await updatePost(post.id, {
+        title,
+        location,
+        location_lowercase: location.toLowerCase(),
+        content: firestoreContents,
+        category: category || "",
+      });
+      
+      if (onUpdatePost) {
+        onUpdatePost();
+      }
+      alert("Cập nhật bài viết thành công!");
     } catch (err) {
-      alert("Đăng bài thất bại, thử lại.");
+      alert("Cập nhật bài viết thất bại: " + err.message);
     } finally {
       setIsSubmitting(false);
     }
@@ -187,8 +243,8 @@ const CreatePost = ({ user, onCreatePost, onCancel }) => {
     <div className="create-post-container">
       <form onSubmit={handleSubmit} className="create-post-form">
         <div className="form-header">
-          <h2>Tạo bài viết mới</h2>
-          <p>Chia sẻ trải nghiệm du lịch tuyệt vời của bạn!</p>
+          <h2>Chỉnh sửa bài viết</h2>
+          <p>Cập nhật thông tin bài viết của bạn</p>
         </div>
 
         <div className="form-group">
@@ -392,7 +448,7 @@ const CreatePost = ({ user, onCreatePost, onCancel }) => {
             className="submit-button"
             disabled={isSubmitting}
           >
-            {isSubmitting ? "Đang đăng..." : "Đăng bài"}
+            {isSubmitting ? "Đang cập nhật..." : "Cập nhật bài viết"}
           </button>
         </div>
       </form>
@@ -400,4 +456,5 @@ const CreatePost = ({ user, onCreatePost, onCancel }) => {
   );
 };
 
-export default CreatePost;
+export default EditPost;
+
