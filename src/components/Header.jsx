@@ -12,6 +12,7 @@ import {
   Bookmark,
   Shield,
   CalendarDays,
+  LogIn,
 } from "lucide-react";
 import "./Header.css";
 import { logOut } from "../services/firebase";
@@ -270,7 +271,8 @@ const Header = ({
                     </div>
                   ) : (
                     <Link to="/login" className="login-btn-full">
-                      Đăng nhập
+                      <LogIn size={18} />
+                      <span>Đăng nhập</span>
                     </Link>
                   )}
                 </div>
@@ -463,7 +465,7 @@ const Header = ({
                   className="login-btn-compact"
                   title="Đăng nhập"
                 >
-                  <span>ĐN</span>
+                  <LogIn size={18} />
                 </Link>
               )}
             </div>

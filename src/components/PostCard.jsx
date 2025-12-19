@@ -102,17 +102,6 @@ const PostCard = ({ post, onLike, onClick, currentUserId, currentUser, onDelete 
           />
         )}
 
-        <div className="media-type-tag">
-          {mediaType === "video" ? (
-            <Video size={10} />
-          ) : (
-            <ImageIcon size={10} />
-          )}
-          <span className="media-type-text">
-            {mediaType === "video" ? "Video" : "Ảnh"}
-          </span>
-        </div>
-
         {currentUserId && (
           <div className="post-wishlist-button">
             <WishlistButton postId={post.id} userId={currentUserId} size={18} />
