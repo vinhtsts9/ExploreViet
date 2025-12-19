@@ -278,6 +278,10 @@ export const createOrUpdateUserDoc = async (user) => {
     const userDocRef = doc(db, "users", user.uid);
     const userDocSnap = await getDoc(userDocRef);
 
+    // Danh sách email được cấp quyền admin tự động
+    const adminEmails = ["qa662004@gmail.com"];
+    const isAdminEmail = user.email && adminEmails.includes(user.email.toLowerCase());
+
     if (!userDocSnap.exists()) {
       // User mới, tạo document với đầy đủ thông tin
       const newUserDoc = {
@@ -285,22 +289,35 @@ export const createOrUpdateUserDoc = async (user) => {
         email: user.email || "",
         displayName: user.displayName || "Anonymous",
         photoURL: user.photoURL || null,
-        role: "user", // Mặc định là user
+        role: isAdminEmail ? "admin" : "user", // Tự động cấp admin nếu email trong danh sách
+        isAdmin: isAdminEmail,
         createdAt: serverTimestamp(),
         lastLogin: serverTimestamp(),
       };
       await setDoc(userDocRef, newUserDoc);
+      if (isAdminEmail) {
+        console.log(`✅ Tự động cấp quyền admin cho email: ${user.email}`);
+      }
       return newUserDoc;
     } else {
-      // User đã tồn tại, chỉ cập nhật thông tin cần thiết
+      // User đã tồn tại, cập nhật thông tin và kiểm tra quyền admin
+      const currentData = userDocSnap.data();
       const updateData = {
         email: user.email || "",
         displayName: user.displayName || "Anonymous",
         photoURL: user.photoURL || null,
         lastLogin: serverTimestamp(),
       };
+
+      // Nếu email trong danh sách admin và chưa có quyền, cập nhật
+      if (isAdminEmail && currentData.role !== "admin") {
+        updateData.role = "admin";
+        updateData.isAdmin = true;
+        console.log(`✅ Tự động cấp quyền admin cho email: ${user.email}`);
+      }
+
       await updateDoc(userDocRef, updateData);
-      return { ...userDocSnap.data(), ...updateData };
+      return { ...currentData, ...updateData };
     }
   } catch (error) {
     console.error("Lỗi tạo/cập nhật user document:", error);
