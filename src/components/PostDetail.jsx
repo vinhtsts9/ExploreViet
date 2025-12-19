@@ -602,13 +602,13 @@ const PostDetail = ({ post, onBack, onLike, currentUserId, currentUser, posts = 
             <div className="detail-stats">
               {post.likes > 0 && (
                 <span className="stat-text">
-                  <Heart size={18} className={isLiked ? "stat-icon liked" : "stat-icon"} />
+                  <Heart size={2} className={isLiked ? "stat-icon liked" : "stat-icon"} />
                   {post.likes} lượt thích
                 </span>
               )}
               {comments.length > 0 && (
                 <span className="stat-text">
-                  <MessageCircle size={18} className="stat-icon" />
+                  <MessageCircle size={2} className="stat-icon" />
                   {comments.length} bình luận
                 </span>
               )}
@@ -625,7 +625,7 @@ const PostDetail = ({ post, onBack, onLike, currentUserId, currentUser, posts = 
               className={`action-button action-like-btn ${isLiked ? "liked" : ""}`}
             >
               <Heart
-                size={18}
+                size={27}
                 className={isLiked ? "heart-icon liked" : "heart-icon"}
               />
               <span>{isLiked ? "Bỏ thích" : "Thích"}</span>
@@ -637,7 +637,7 @@ const PostDetail = ({ post, onBack, onLike, currentUserId, currentUser, posts = 
                 document.querySelector('.comment-input')?.focus();
               }}
             >
-              <MessageCircle size={18} className="action-icon" />
+              <MessageCircle size={27} className="action-icon" />
               <span>Bình luận</span>
             </button>
           </div>
