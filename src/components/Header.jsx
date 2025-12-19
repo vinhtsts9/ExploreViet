@@ -193,7 +193,10 @@ const Header = ({
                       <span>Danh sách yêu thích</span>
                     </Link>
                   )}
+                </div>
 
+                {/* Hàng 2 */}
+                <div className="nav-row-2">
                   {user && (
                     <Link
                       to="/itinerary-planner/new"
@@ -219,10 +222,6 @@ const Header = ({
                       <span>Lịch trình của tôi</span>
                     </Link>
                   )}
-                </div>
-
-                {/* Hàng 2 */}
-                <div className="nav-row-2">
                   <Link
                     to="/qa"
                     className={`nav-btn-full ${
