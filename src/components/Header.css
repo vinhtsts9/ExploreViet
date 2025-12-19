@@ -459,8 +459,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 64px;
-  height: 64px;
+  width: 83px;
+  height: 83px;
   cursor: pointer;
   border-radius: 10px;
   transition: all 0.3s ease;
@@ -479,8 +479,8 @@
 }
 
 .logo-icon-compact {
-  width: 42px;
-  height: 42px;
+  width: 55px;
+  height: 55px;
   object-fit: contain;
   border-radius: 16px;
   background: rgba(255, 255, 255, 0.1);

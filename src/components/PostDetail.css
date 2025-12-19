@@ -483,6 +483,8 @@
   flex-shrink: 0;
   color: #65676b;
   transition: color 0.2s ease;
+  width: 18px;
+  height: 18px;
 }
 
 .stat-text:hover .stat-icon {
@@ -559,6 +561,8 @@
   flex-shrink: 0;
   position: relative;
   z-index: 1;
+  width: 18px;
+  height: 18px;
 }
 
 .heart-icon.liked {
