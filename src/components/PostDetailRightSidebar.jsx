@@ -114,20 +114,6 @@ const PostDetailRightSidebar = ({
               <span className="stat-label">Lượt xem</span>
             </div>
           </div>
-          <div className="stat-item-compact">
-            <Heart size={16} />
-            <div className="stat-info">
-              <span className="stat-value">{post.likes || 0}</span>
-              <span className="stat-label">Lượt thích</span>
-            </div>
-          </div>
-          <div className="stat-item-compact">
-            <MessageCircle size={16} />
-            <div className="stat-info">
-              <span className="stat-value">{commentCount || post.commentCount || 0}</span>
-              <span className="stat-label">Bình luận</span>
-            </div>
-          </div>
         </div>
       </div>
 
