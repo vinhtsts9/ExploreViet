@@ -128,15 +128,6 @@ const PostDetailRightSidebar = ({
               <span className="stat-label">Bình luận</span>
             </div>
           </div>
-          {post.rating && (
-            <div className="stat-item-compact">
-              <Star size={16} />
-              <div className="stat-info">
-                <span className="stat-value">{post.rating.toFixed(1)}</span>
-                <span className="stat-label">Đánh giá</span>
-              </div>
-            </div>
-          )}
         </div>
       </div>
 

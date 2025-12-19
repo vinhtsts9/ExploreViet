@@ -51,39 +51,29 @@
   color: #1f2937;
 }
 
-/* Statistics - Windows Style */
+/* Statistics - Simple Layout */
 .stats-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  grid-template-rows: repeat(2, 1fr);
+  display: flex;
+  flex-direction: column;
   gap: 0;
-  border: 2px outset #c0c0c0;
-  background: #c0c0c0;
-  padding: 2px;
 }
 
 .stat-item-compact {
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  padding: 0.875rem;
-  background: #ffffff;
-  border: 1px inset #c0c0c0;
-  transition: all 0.15s ease;
-  position: relative;
+  padding: 0.75rem;
+  background: #f9fafb;
+  border-radius: 0;
+  border-bottom: 1px solid #e5e7eb;
 }
 
-.stat-item-compact:hover {
-  background: #f0f0f0;
-}
-
-.stat-item-compact:active {
-  border: 1px inset #808080;
-  background: #e0e0e0;
+.stat-item-compact:last-child {
+  border-bottom: none;
 }
 
 .stat-item-compact svg {
-  color: #000080;
+  color: #3b82f6;
   flex-shrink: 0;
 }
 
@@ -96,17 +86,15 @@
 
 .stat-value {
   font-size: 1.125rem;
-  font-weight: 700;
-  color: #000000;
+  font-weight: 600;
+  color: #1f2937;
   line-height: 1.2;
-  font-family: 'MS Sans Serif', sans-serif;
 }
 
 .stat-label {
-  font-size: 0.6875rem;
-  color: #000000;
+  font-size: 0.75rem;
+  color: #6b7280;
   font-weight: 400;
-  font-family: 'MS Sans Serif', sans-serif;
 }
 
 /* Related Posts */
