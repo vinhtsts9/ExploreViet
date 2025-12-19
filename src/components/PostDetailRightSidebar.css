@@ -51,12 +51,12 @@
   color: #1f2937;
 }
 
-/* Statistics */
+/* Statistics - Redesigned */
 .stats-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   grid-template-rows: repeat(2, 1fr);
-  gap: 0.625rem;
+  gap: 0.75rem;
 }
 
 .stat-item-compact {
@@ -64,44 +64,148 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
-  padding: 0.875rem 0.5rem;
-  background: #f9fafb;
-  border-radius: 10px;
+  gap: 0.75rem;
+  padding: 1.25rem 0.75rem;
+  border-radius: 16px;
   text-align: center;
-  transition: all 0.2s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+  border: 1px solid transparent;
+}
+
+.stat-item-compact::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  border-radius: 16px;
 }
 
 .stat-item-compact:hover {
-  background: #f3f4f6;
-  transform: translateY(-2px);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  transform: translateY(-4px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
 }
 
-.stat-item-compact svg {
-  color: #667eea;
-  flex-shrink: 0;
+.stat-item-compact:hover::before {
+  opacity: 1;
+}
+
+/* Views - Blue */
+.stat-views {
+  background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%);
+  border-color: #7dd3fc;
+}
+
+.stat-views::before {
+  background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+}
+
+.stat-views .stat-icon-wrapper {
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  color: white;
+}
+
+/* Likes - Red/Pink */
+.stat-likes {
+  background: linear-gradient(135deg, #fce7f3 0%, #fbcfe8 100%);
+  border-color: #f9a8d4;
+}
+
+.stat-likes::before {
+  background: linear-gradient(135deg, #fdf2f8 0%, #fce7f3 100%);
+}
+
+.stat-likes .stat-icon-wrapper {
+  background: linear-gradient(135deg, #ec4899 0%, #db2777 100%);
+  color: white;
+}
+
+/* Comments - Green */
+.stat-comments {
+  background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+  border-color: #6ee7b7;
+}
+
+.stat-comments::before {
+  background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+}
+
+.stat-comments .stat-icon-wrapper {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: white;
+}
+
+/* Rating - Yellow/Orange */
+.stat-rating {
+  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+  border-color: #fcd34d;
+}
+
+.stat-rating::before {
+  background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+}
+
+.stat-rating .stat-icon-wrapper {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  color: white;
+}
+
+/* Placeholder */
+.stat-placeholder {
+  background: transparent;
+  border: 1px dashed #e5e7eb;
+  opacity: 0.5;
+}
+
+.stat-placeholder:hover {
+  transform: none;
+  box-shadow: none;
+}
+
+/* Icon Wrapper */
+.stat-icon-wrapper {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease;
+}
+
+.stat-item-compact:hover .stat-icon-wrapper {
+  transform: scale(1.1) rotate(5deg);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
 }
 
 .stat-info {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.125rem;
+  gap: 0.25rem;
   width: 100%;
 }
 
 .stat-value {
-  font-size: 1.125rem;
-  font-weight: 700;
+  font-size: 1.5rem;
+  font-weight: 800;
   color: #1f2937;
   line-height: 1.2;
+  letter-spacing: -0.02em;
 }
 
 .stat-label {
-  font-size: 0.6875rem;
-  color: #6b7280;
-  font-weight: 500;
+  font-size: 0.75rem;
+  color: #4b5563;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
 /* Related Posts */

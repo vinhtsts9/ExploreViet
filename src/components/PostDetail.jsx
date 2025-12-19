@@ -576,11 +576,13 @@ const PostDetail = ({ post, onBack, onLike, currentUserId, currentUser, posts = 
             <div className="detail-stats">
               {post.likes > 0 && (
                 <span className="stat-text">
+                  <Heart size={14} className={isLiked ? "stat-icon liked" : "stat-icon"} />
                   {post.likes} lượt thích
                 </span>
               )}
               {comments.length > 0 && (
                 <span className="stat-text">
+                  <MessageCircle size={14} className="stat-icon" />
                   {comments.length} bình luận
                 </span>
               )}

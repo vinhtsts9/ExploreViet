@@ -464,6 +464,9 @@
 }
 
 .stat-text {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
   color: #65676b;
   font-size: 0.9375rem;
   font-weight: 400;
@@ -474,6 +477,25 @@
 .stat-text:hover {
   text-decoration: underline;
   color: #1877f2;
+}
+
+.stat-text .stat-icon {
+  flex-shrink: 0;
+  color: #65676b;
+  transition: color 0.2s ease;
+}
+
+.stat-text:hover .stat-icon {
+  color: #1877f2;
+}
+
+.stat-text .stat-icon.liked {
+  color: #f02849;
+  fill: #f02849;
+}
+
+.stat-text:hover .stat-icon.liked {
+  color: #f02849;
 }
 
 /* Divider - Facebook Style */
@@ -516,11 +538,11 @@
 }
 
 .action-like-btn.liked {
-  color: #1877f2;
+  color: #f02849;
 }
 
 .action-like-btn.liked:hover {
-  background-color: #e7f3ff;
+  background-color: #fef2f2;
 }
 
 .action-comment-btn {
@@ -541,7 +563,7 @@
 
 .heart-icon.liked {
   fill: currentColor;
-  color: #1877f2;
+  color: #f02849;
   animation: heartBeat 0.3s ease;
 }
 

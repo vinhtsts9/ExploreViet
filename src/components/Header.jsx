@@ -49,6 +49,14 @@ const Header = ({
   // Kiểm tra xem có phải trang chủ không
   const isHomePage = location.pathname === "/";
 
+  // Handle logo click
+  const handleLogoClick = (e) => {
+    if (isHomePage) {
+      e.preventDefault();
+      window.location.reload();
+    }
+  };
+
   // Reset scroll state khi chuyển trang
   useEffect(() => {
     if (!isHomePage) {
@@ -129,7 +137,7 @@ const Header = ({
           <div className="header-full-layout">
             {/* Logo */}
             <div className="header-logo-section">
-              <Link to="/" className="header-logo">
+              <Link to="/" className="header-logo" onClick={handleLogoClick}>
                 <Sparkles className="logo-icon" size={28} />
                 <span className="logo-text">ExploreViet</span>
               </Link>
@@ -310,7 +318,7 @@ const Header = ({
         <div className="header-compact">
           <div className="header-compact-layout">
             {/* Logo - chỉ icon */}
-            <Link to="/" className="logo-compact">
+            <Link to="/" className="logo-compact" onClick={handleLogoClick}>
               <Sparkles className="logo-icon-compact" size={24} />
             </Link>
 
