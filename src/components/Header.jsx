@@ -138,7 +138,7 @@ const Header = ({
             {/* Logo */}
             <div className="header-logo-section">
               <Link to="/" className="header-logo" onClick={handleLogoClick}>
-                <Sparkles className="logo-icon" size={28} />
+                <img src="/logo.png" alt="ExploreViet" className="logo-icon" />
                 <span className="logo-text">ExploreViet</span>
               </Link>
             </div>
@@ -319,7 +319,7 @@ const Header = ({
           <div className="header-compact-layout">
             {/* Logo - chỉ icon */}
             <Link to="/" className="logo-compact" onClick={handleLogoClick}>
-              <Sparkles className="logo-icon-compact" size={24} />
+              <img src="/logo.png" alt="ExploreViet" className="logo-icon-compact" />
             </Link>
 
             {/* Navigation - chỉ icon */}

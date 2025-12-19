@@ -75,7 +75,9 @@
 }
 
 .logo-icon {
-  color: #fde047;
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
   flex-shrink: 0;
   transition: transform 0.3s ease;
 }
@@ -461,7 +463,9 @@
 }
 
 .logo-icon-compact {
-  color: #fde047;
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
 }
 
 /* Navigation Compact - Chỉ icon */
