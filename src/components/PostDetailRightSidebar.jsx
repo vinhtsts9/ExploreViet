@@ -107,45 +107,35 @@ const PostDetailRightSidebar = ({
           <h3>Thống kê</h3>
         </div>
         <div className="stats-grid">
-          <div className="stat-item-compact stat-views">
-            <div className="stat-icon-wrapper">
-              <Eye size={20} />
-            </div>
+          <div className="stat-item-compact">
+            <Eye size={16} />
             <div className="stat-info">
               <span className="stat-value">{views || 0}</span>
               <span className="stat-label">Lượt xem</span>
             </div>
           </div>
-          <div className="stat-item-compact stat-likes">
-            <div className="stat-icon-wrapper">
-              <Heart size={20} />
-            </div>
+          <div className="stat-item-compact">
+            <Heart size={16} />
             <div className="stat-info">
               <span className="stat-value">{post.likes || 0}</span>
               <span className="stat-label">Lượt thích</span>
             </div>
           </div>
-          <div className="stat-item-compact stat-comments">
-            <div className="stat-icon-wrapper">
-              <MessageCircle size={20} />
-            </div>
+          <div className="stat-item-compact">
+            <MessageCircle size={16} />
             <div className="stat-info">
               <span className="stat-value">{commentCount || post.commentCount || 0}</span>
               <span className="stat-label">Bình luận</span>
             </div>
           </div>
-          {post.rating ? (
-            <div className="stat-item-compact stat-rating">
-              <div className="stat-icon-wrapper">
-                <Star size={20} />
-              </div>
+          {post.rating && (
+            <div className="stat-item-compact">
+              <Star size={16} />
               <div className="stat-info">
                 <span className="stat-value">{post.rating.toFixed(1)}</span>
                 <span className="stat-label">Đánh giá</span>
               </div>
             </div>
-          ) : (
-            <div className="stat-item-compact stat-placeholder"></div>
           )}
         </div>
       </div>
