@@ -577,7 +577,7 @@ const PostDetail = ({ post, onBack, onLike, currentUserId, currentUser, posts = 
               {post.likes > 0 && (
                 <div className="stat-item">
                   <Heart
-                    size={16}
+                    size={14}
                     className={isLiked ? "stat-icon liked" : "stat-icon"}
                   />
                   <span>{post.likes} lượt thích</span>
@@ -585,7 +585,7 @@ const PostDetail = ({ post, onBack, onLike, currentUserId, currentUser, posts = 
               )}
               {comments.length > 0 && (
                 <div className="stat-item">
-                  <MessageCircle size={16} className="stat-icon" />
+                  <MessageCircle size={14} className="stat-icon" />
                   <span>{comments.length} bình luận</span>
                 </div>
               )}
