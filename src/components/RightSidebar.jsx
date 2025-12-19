@@ -8,8 +8,8 @@ const RightSidebar = ({ posts, users, onPostClick }) => {
     const userPostCounts = {};
     posts.forEach((post) => {
       const userId = post.userId;
-      const userName = post.authorName || "Anonymous";
-      const userPhoto = post.authorPhoto || null;
+      const userName = post.userName || "Anonymous";
+      const userPhoto = post.userPhotoURL || null;
       
       if (userId && userId !== "gemini_ai") {
         if (!userPostCounts[userId]) {
@@ -139,7 +139,7 @@ const RightSidebar = ({ posts, users, onPostClick }) => {
                       {post.title || post.location || "Bài viết mới"}
                     </span>
                     <span className="activity-meta">
-                      {post.authorName || "Anonymous"} • {formatTimeAgo(post.createdAt)}
+                      {post.userName || "Anonymous"} • {formatTimeAgo(post.createdAt)}
                     </span>
                   </div>
                 </li>
