@@ -14,6 +14,7 @@ import "./App.css";
 import Header from "./components/Header";
 import PostCard from "./components/PostCard";
 import Login from "./components/Login";
+import AdminLogin from "./components/AdminLogin";
 import CreatePost from "./components/CreatePost";
 import EditPost from "./components/EditPost";
 import PostDetail from "./components/PostDetail";
@@ -37,7 +38,8 @@ import {
   generateRichPostContent,
 } from "./services/gemini";
 import { createPost, likePost, unlikePost, deletePost } from "./services/posts";
-import { createOrUpdateUserDoc } from "./services/admin";
+import { createOrUpdateUserDoc, isUserAdmin } from "./services/admin";
+import { checkAdminStatus } from "./services/adminAuth";
 import { apiPostAuth } from "./api";
 import { createDemoPost } from "./utils/createDemoPost";
 
@@ -83,8 +85,21 @@ function ItineraryPlannerWrapper({ user, navigate }) {
 // Wrapper component for EditPost to get postId from URL
 function EditPostWrapper({ posts, user, onUpdatePost, onCancelEdit, navigate }) {
   const { id } = useParams();
+  const [isAdmin, setIsAdmin] = React.useState(false);
+  const [checkingAdmin, setCheckingAdmin] = React.useState(true);
   const post = posts.find((p) => p && p.id === id);
-  
+
+  React.useEffect(() => {
+    const checkAdmin = async () => {
+      if (user?.uid) {
+        const adminStatus = await checkAdminStatus(user.uid);
+        setIsAdmin(adminStatus);
+      }
+      setCheckingAdmin(false);
+    };
+    checkAdmin();
+  }, [user]);
+
   if (!post) {
     return (
       <div className="main-content-wrapper">
@@ -97,8 +112,19 @@ function EditPostWrapper({ posts, user, onUpdatePost, onCancelEdit, navigate }) 
       </div>
     );
   }
+
+  if (checkingAdmin) {
+    return (
+      <div className="main-content-wrapper">
+        <div className="page-header">
+          <h2>Đang kiểm tra quyền...</h2>
+        </div>
+      </div>
+    );
+  }
   
-  if (post.userId !== user?.uid) {
+  const isOwner = post.userId === user?.uid;
+  if (!isOwner && !isAdmin) {
     return (
       <div className="main-content-wrapper">
         <div className="page-header">
@@ -926,6 +952,9 @@ function AppContent() {
 
         {/* Login Page */}
         <Route path="/login" element={<Login />} />
+
+        {/* Admin Login Page */}
+        <Route path="/admin/login" element={<AdminLogin />} />
 
         {/* Admin Dashboard */}
         <Route

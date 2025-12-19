@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import Rating from "./Rating";
 import WishlistButton from "./WishlistButton";
+import { checkAdminStatus } from "../services/adminAuth";
 import "./PostCard.css";
 
 // Format time and accept Firestore Timestamp
@@ -37,7 +38,19 @@ const formatTimeAgo = (date) => {
 
 const PostCard = ({ post, onLike, onClick, currentUserId, currentUser, onDelete, onEdit }) => {
   const [showMenu, setShowMenu] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
   const menuRef = useRef(null);
+
+  // Check admin status
+  useEffect(() => {
+    const checkAdmin = async () => {
+      if (currentUser?.uid) {
+        const adminStatus = await checkAdminStatus(currentUser.uid);
+        setIsAdmin(adminStatus);
+      }
+    };
+    checkAdmin();
+  }, [currentUser]);
 
   // Close menu when clicking outside
   useEffect(() => {
@@ -57,6 +70,7 @@ const PostCard = ({ post, onLike, onClick, currentUserId, currentUser, onDelete,
   }, [showMenu]);
 
   const isOwner = currentUser && post.userId === currentUser.uid;
+  const canEdit = isOwner || isAdmin;
 
   const handleDelete = async (e) => {
     e.stopPropagation();
@@ -110,7 +124,7 @@ const PostCard = ({ post, onLike, onClick, currentUserId, currentUser, onDelete,
         )}
 
         {/* Delete Menu - Only show for post owner */}
-        {isOwner && (
+        {canEdit && (
           <div className="post-menu-container" ref={menuRef}>
             <button
               className="post-menu-button"

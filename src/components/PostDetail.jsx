@@ -20,6 +20,7 @@ import WishlistButton from "./WishlistButton";
 import MapForLocation from "./MapForLocation";
 import PostDetailLeftSidebar from "./PostDetailLeftSidebar";
 import PostDetailRightSidebar from "./PostDetailRightSidebar";
+import { checkAdminStatus } from "../services/adminAuth";
 import "./PostDetail.css";
 import { addComment, addReply, listenComments, ratePost, getUserRating, incrementPostViews, likeReply, unlikeReply } from "../services/posts";
 
@@ -60,7 +61,7 @@ const formatTimeAgo = (date) => {
   });
 };
 
-const PostDetail = ({ post, onBack, onLike, currentUserId, currentUser, posts = [], onPostClick, onDelete }) => {
+const PostDetail = ({ post, onBack, onLike, currentUserId, currentUser, posts = [], onPostClick, onDelete, onEdit }) => {
   const navigate = useNavigate();
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState("");
@@ -74,7 +75,19 @@ const PostDetail = ({ post, onBack, onLike, currentUserId, currentUser, posts = 
   const [postRating, setPostRating] = useState(0);
   const [ratingCount, setRatingCount] = useState(0);
   const [showMenu, setShowMenu] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
   const menuRef = useRef(null);
+
+  // Check admin status
+  useEffect(() => {
+    const checkAdmin = async () => {
+      if (currentUser?.uid) {
+        const adminStatus = await checkAdminStatus(currentUser.uid);
+        setIsAdmin(adminStatus);
+      }
+    };
+    checkAdmin();
+  }, [currentUser]);
 
   // Close menu when clicking outside
   useEffect(() => {
@@ -94,6 +107,7 @@ const PostDetail = ({ post, onBack, onLike, currentUserId, currentUser, posts = 
   }, [showMenu]);
 
   const isOwner = currentUser && post && post.userId === currentUser.uid;
+  const canEdit = isOwner || isAdmin;
 
   // Get first image from post content for preview
   const getFirstImage = () => {
@@ -399,8 +413,8 @@ const PostDetail = ({ post, onBack, onLike, currentUserId, currentUser, posts = 
           <div className="detail-title-wrapper">
             <h1 className="detail-title">{post.title || "Không có tiêu đề"}</h1>
             
-            {/* Delete Menu - Only show for post owner */}
-            {isOwner && (
+            {/* Delete Menu - Only show for post owner or admin */}
+            {canEdit && (
               <div className="post-detail-menu-container" ref={menuRef}>
                 <button
                   className="post-detail-menu-button"

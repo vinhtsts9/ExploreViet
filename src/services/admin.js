@@ -23,7 +23,7 @@ export const isUserAdmin = async (userId) => {
 
     if (userDocSnap.exists()) {
       const userData = userDocSnap.data();
-      return userData.role === "admin";
+      return userData.role === "admin" || userData.isAdmin === true;
     }
     return false;
   } catch (error) {
