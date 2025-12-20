@@ -597,9 +597,12 @@ function AppContent() {
 
     // Text search filter
     if (searchQuery) {
-      const q = searchQuery.toLowerCase();
+      const q = searchQuery.toLowerCase().trim();
       filtered = filtered.filter((p) => {
-        const inLocation = p.location_lowercase?.includes(q);
+        // Ưu tiên exact match với location (case-insensitive)
+        const locationLower = (p.location_lowercase || p.location?.toLowerCase() || "").trim();
+        const exactLocationMatch = locationLower === q || locationLower.startsWith(q + ",") || locationLower.startsWith(q + " ");
+        const inLocation = exactLocationMatch || locationLower.includes(q);
         const inTitle = p.title?.toLowerCase().includes(q);
         const inContent = (p.content || []).some(
           (c) => c.type === "text" && c.content?.toLowerCase().includes(q)
@@ -719,7 +722,14 @@ function AppContent() {
                 activeCategory={filters.category}
                 onFilterClick={(filter) => {
                   if (typeof filter === "string") {
-                    setFilters((prev) => ({ ...prev, category: filter }));
+                    // Kiểm tra xem có phải là category hợp lệ không
+                    const validCategories = ["beach", "mountain", "culture", "food", "adventure", "relax"];
+                    if (validCategories.includes(filter)) {
+                      setFilters((prev) => ({ ...prev, category: filter }));
+                    } else {
+                      // Nếu không phải category, thì đó là location - set vào searchQuery
+                      setSearchQuery(filter);
+                    }
                   } else {
                     setSearchQuery(filter);
                   }
