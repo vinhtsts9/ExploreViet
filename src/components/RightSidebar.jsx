@@ -2,11 +2,23 @@ import React from "react";
 import { Users, Clock, Star, TrendingUp, User } from "lucide-react";
 import "./RightSidebar.css";
 
-const RightSidebar = ({ posts, users, onPostClick }) => {
-  // Top Contributors
+const RightSidebar = ({ posts, users, onPostClick, onUserClick, currentUser = null }) => {
+  // Filter posts giống như logic trong App.jsx - chỉ đếm approved posts
+  const getVisiblePosts = () => {
+    return posts.filter((p) => {
+      // Show all posts for the post owner
+      if (p.userId === currentUser?.uid) return true;
+      // Show only approved posts for other users
+      return p.status === "approved" || !p.status; // !p.status for backward compatibility
+    });
+  };
+
+  // Top Contributors - chỉ đếm approved posts
   const getTopContributors = () => {
+    const visiblePosts = getVisiblePosts();
     const userPostCounts = {};
-    posts.forEach((post) => {
+    
+    visiblePosts.forEach((post) => {
       const userId = post.userId;
       const userName = post.userName || "Anonymous";
       const userPhoto = post.userPhotoURL || null;
@@ -14,6 +26,7 @@ const RightSidebar = ({ posts, users, onPostClick }) => {
       if (userId && userId !== "gemini_ai") {
         if (!userPostCounts[userId]) {
           userPostCounts[userId] = {
+            userId: userId,
             name: userName,
             photo: userPhoto,
             count: 0,
@@ -84,7 +97,12 @@ const RightSidebar = ({ posts, users, onPostClick }) => {
           {topContributors.length > 0 ? (
             <ul className="contributors-list">
               {topContributors.map((contributor, index) => (
-                <li key={index} className="contributor-item">
+                <li 
+                  key={index} 
+                  className="contributor-item"
+                  onClick={() => onUserClick && onUserClick(contributor.userId)}
+                  style={{ cursor: onUserClick ? 'pointer' : 'default' }}
+                >
                   <span className="contributor-rank">#{index + 1}</span>
                   <div className="contributor-avatar">
                     {contributor.photo ? (

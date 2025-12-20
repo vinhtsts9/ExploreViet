@@ -382,6 +382,7 @@ function AppContent() {
     sortBy: "newest",
     minRating: 0,
   });
+  const [selectedUserId, setSelectedUserId] = useState(null);
 
   // --- 1. AUTH & DATA FETCHING ---
   useEffect(() => {
@@ -442,6 +443,7 @@ function AppContent() {
   const handleSearch = async (e) => {
     e.preventDefault();
     if (!searchQuery.trim()) return;
+    setSelectedUserId(null); // Clear user filter when searching
 
     const q = searchQuery.toLowerCase();
     const hasResult = posts.some((p) => {
@@ -627,6 +629,11 @@ function AppContent() {
       filtered = filtered.filter((p) => (p.rating || 0) >= filters.minRating);
     }
 
+    // User filter - filter posts by userId
+    if (selectedUserId) {
+      filtered = filtered.filter((p) => p.userId === selectedUserId);
+    }
+
     // Sort
     switch (filters.sortBy) {
       case "popular":
@@ -652,6 +659,17 @@ function AppContent() {
   const handleEditPost = (post) => {
     setEditingPost(post);
     navigate(`/edit/${post.id}`);
+  };
+
+  const handleUserClick = (userId) => {
+    setSelectedUserId(userId);
+    setSearchQuery(""); // Clear search query when filtering by user
+    setFilters({
+      province: "",
+      category: "",
+      sortBy: "newest",
+      minRating: 0,
+    }); // Reset other filters
   };
 
   const handleUpdatePost = async () => {
@@ -719,6 +737,7 @@ function AppContent() {
                 user={user}
                 activeCategory={filters.category}
                 onFilterClick={(filter) => {
+                  setSelectedUserId(null); // Clear user filter when filtering by location/category
                   if (typeof filter === "string") {
                     // Kiểm tra xem có phải là category hợp lệ không
                     const validCategories = ["beach", "mountain", "culture", "food", "adventure", "relax"];
@@ -733,6 +752,7 @@ function AppContent() {
                   }
                 }}
                 onTagClick={(tag) => {
+                  setSelectedUserId(null); // Clear user filter when filtering by tag
                   setSearchQuery(tag);
                 }}
               />
@@ -747,7 +767,13 @@ function AppContent() {
                   </div>
                 )}
 
-                <Filter onFilterChange={setFilters} posts={posts} />
+                <Filter 
+                  onFilterChange={(newFilters) => {
+                    setSelectedUserId(null); // Clear user filter when other filters change
+                    setFilters(newFilters);
+                  }} 
+                  posts={posts} 
+                />
 
                 {loading ? (
                   <div className="loading-indicator">
@@ -785,6 +811,8 @@ function AppContent() {
                 posts={posts}
                 users={user}
                 onPostClick={handlePostClick}
+                onUserClick={handleUserClick}
+                currentUser={user}
               />
             </div>
           }
