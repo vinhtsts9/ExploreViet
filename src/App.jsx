@@ -595,7 +595,7 @@ function AppContent() {
       return p.status === "approved" || !p.status; // !p.status for backward compatibility
     });
 
-    // Text search filter
+    // Text search filter - chỉ match theo location và title
     if (searchQuery) {
       const q = searchQuery.toLowerCase().trim();
       filtered = filtered.filter((p) => {
@@ -604,10 +604,7 @@ function AppContent() {
         const exactLocationMatch = locationLower === q || locationLower.startsWith(q + ",") || locationLower.startsWith(q + " ");
         const inLocation = exactLocationMatch || locationLower.includes(q);
         const inTitle = p.title?.toLowerCase().includes(q);
-        const inContent = (p.content || []).some(
-          (c) => c.type === "text" && c.content?.toLowerCase().includes(q)
-        );
-        return inLocation || inTitle || inContent;
+        return inLocation || inTitle;
       });
     }
 

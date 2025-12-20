@@ -21,48 +21,49 @@ const LeftSidebar = ({ posts, onFilterClick, onTagClick, activeCategory = "", us
     return parts[0].trim().toLowerCase();
   };
 
-  // Đếm số posts match với location (giống logic filter trong App.jsx)
+  // Đếm số posts match với location (giống HOÀN TOÀN logic filter trong App.jsx - chỉ match location và title)
   const countPostsForLocation = (locationName, allPosts) => {
     const q = locationName.toLowerCase().trim();
     return allPosts.filter((p) => {
+      // Logic giống hệt App.jsx - chỉ match location và title
       const locationLower = (p.location_lowercase || p.location?.toLowerCase() || "").trim();
       const exactLocationMatch = locationLower === q || locationLower.startsWith(q + ",") || locationLower.startsWith(q + " ");
       const inLocation = exactLocationMatch || locationLower.includes(q);
-      return inLocation;
+      const inTitle = p.title?.toLowerCase().includes(q);
+      return inLocation || inTitle;
     }).length;
   };
 
   // Tính toán trending destinations từ posts đã filter
   const getTrendingDestinations = () => {
     const visiblePosts = getVisiblePosts();
-    const locationGroups = {};
+    const locationCountsMap = new Map(); // Map để lưu locationKey -> {displayName, count}
     
-    // Group các location tương tự nhau
+    // Lấy tất cả location unique và normalize
     visiblePosts.forEach((post) => {
       const location = post.location || "Unknown";
-      const locationKey = normalizeLocationForGrouping(location);
+      if (location === "Unknown") return;
       
-      if (!locationGroups[locationKey]) {
-        locationGroups[locationKey] = {
-          displayName: location.split(",")[0].trim(), // Lấy phần đầu để hiển thị
-          locationKey: locationKey
-        };
+      const locationKey = normalizeLocationForGrouping(location);
+      const displayName = location.split(",")[0].trim();
+      
+      // Nếu chưa có trong map hoặc count = 0, đếm lại
+      if (!locationCountsMap.has(locationKey)) {
+        // Đếm tất cả posts match với displayName (giống khi click vào location)
+        const count = countPostsForLocation(displayName, visiblePosts);
+        locationCountsMap.set(locationKey, {
+          location: displayName,
+          count: count
+        });
       }
     });
 
-    // Đếm số posts cho mỗi location group (sử dụng logic giống filter)
-    const locationCounts = Object.entries(locationGroups).map(([locationKey, data]) => {
-      const count = countPostsForLocation(data.displayName, visiblePosts);
-      return {
-        location: data.displayName,
-        count: count,
-        locationKey: locationKey
-      };
-    });
-
-    return locationCounts
+    // Convert map thành array và sort
+    const locationCounts = Array.from(locationCountsMap.values())
       .sort((a, b) => b.count - a.count)
       .slice(0, 5);
+
+    return locationCounts;
   };
 
   // Lấy popular tags từ posts đã filter
