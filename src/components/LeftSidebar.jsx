@@ -21,32 +21,48 @@ const LeftSidebar = ({ posts, onFilterClick, onTagClick, activeCategory = "", us
     return parts[0].trim().toLowerCase();
   };
 
+  // Đếm số posts match với location (giống logic filter trong App.jsx)
+  const countPostsForLocation = (locationName, allPosts) => {
+    const q = locationName.toLowerCase().trim();
+    return allPosts.filter((p) => {
+      const locationLower = (p.location_lowercase || p.location?.toLowerCase() || "").trim();
+      const exactLocationMatch = locationLower === q || locationLower.startsWith(q + ",") || locationLower.startsWith(q + " ");
+      const inLocation = exactLocationMatch || locationLower.includes(q);
+      return inLocation;
+    }).length;
+  };
+
   // Tính toán trending destinations từ posts đã filter
   const getTrendingDestinations = () => {
     const visiblePosts = getVisiblePosts();
-    const locationCounts = {};
+    const locationGroups = {};
     
+    // Group các location tương tự nhau
     visiblePosts.forEach((post) => {
       const location = post.location || "Unknown";
-      // Normalize location để group các biến thể
       const locationKey = normalizeLocationForGrouping(location);
       
-      if (!locationCounts[locationKey]) {
-        locationCounts[locationKey] = {
+      if (!locationGroups[locationKey]) {
+        locationGroups[locationKey] = {
           displayName: location.split(",")[0].trim(), // Lấy phần đầu để hiển thị
-          count: 0
+          locationKey: locationKey
         };
       }
-      locationCounts[locationKey].count++;
     });
 
-    return Object.entries(locationCounts)
-      .sort(([, a], [, b]) => b.count - a.count)
-      .slice(0, 5)
-      .map(([locationKey, data]) => ({ 
-        location: data.displayName, 
-        count: data.count 
-      }));
+    // Đếm số posts cho mỗi location group (sử dụng logic giống filter)
+    const locationCounts = Object.entries(locationGroups).map(([locationKey, data]) => {
+      const count = countPostsForLocation(data.displayName, visiblePosts);
+      return {
+        location: data.displayName,
+        count: count,
+        locationKey: locationKey
+      };
+    });
+
+    return locationCounts
+      .sort((a, b) => b.count - a.count)
+      .slice(0, 5);
   };
 
   // Lấy popular tags từ posts đã filter
