@@ -9,9 +9,12 @@ import {
   User,
   Search,
   MapPin,
-  Tag
+  Tag,
+  MoreVertical,
+  Trash2
 } from "lucide-react";
-import { createQuestion, listenQuestions, addAnswer, acceptAnswer, incrementQuestionViews, toggleQuestionUpvote, toggleAnswerUpvote, listenAnswers } from "../services/qa";
+import { createQuestion, listenQuestions, addAnswer, acceptAnswer, incrementQuestionViews, toggleQuestionUpvote, toggleAnswerUpvote, listenAnswers, deleteQuestion } from "../services/qa";
+import { checkAdminStatus } from "../services/adminAuth";
 import "./QA.css";
 
 const formatTimeAgo = (date) => {
@@ -40,6 +43,8 @@ const QA = ({ user, onBack }) => {
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [filterSolved, setFilterSolved] = useState(null);
+  const [showMenu, setShowMenu] = useState(null); // questionId or null
+  const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
     if (!selectedQuestion) {
@@ -91,6 +96,43 @@ const QA = ({ user, onBack }) => {
       }
     };
   }, [filterSolved]);
+
+  // Check admin status
+  useEffect(() => {
+    const checkAdmin = async () => {
+      if (user?.uid) {
+        const adminStatus = await checkAdminStatus(user.uid);
+        setIsAdmin(adminStatus);
+      }
+    };
+    checkAdmin();
+  }, [user]);
+
+  // Close menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      // Check if click is outside any menu container
+      const menuContainers = document.querySelectorAll('.qa-menu-container');
+      let isOutside = true;
+      menuContainers.forEach(container => {
+        if (container.contains(event.target)) {
+          isOutside = false;
+        }
+      });
+      
+      if (isOutside) {
+        setShowMenu(null);
+      }
+    };
+
+    if (showMenu) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [showMenu]);
 
   const handleCreateQuestion = async (e) => {
     e.preventDefault();
@@ -187,6 +229,44 @@ const QA = ({ user, onBack }) => {
     }
   };
 
+  const handleDeleteQuestion = async (e, questionId) => {
+    e.stopPropagation();
+    setShowMenu(null);
+    
+    if (!user) {
+      alert("Bạn cần đăng nhập để xóa câu hỏi");
+      return;
+    }
+
+    const question = questions.find((q) => q.id === questionId);
+    if (!question) {
+      alert("Không tìm thấy câu hỏi");
+      return;
+    }
+
+    const isOwner = question.userId === user.uid;
+    if (!isOwner && !isAdmin) {
+      alert("Bạn không có quyền xóa câu hỏi này");
+      return;
+    }
+
+    if (!confirm("Bạn có chắc chắn muốn xóa câu hỏi này?")) {
+      return;
+    }
+
+    try {
+      await deleteQuestion(questionId);
+      alert("Đã xóa câu hỏi thành công!");
+      // If viewing the deleted question, go back to list
+      if (selectedQuestion && selectedQuestion.id === questionId) {
+        setSelectedQuestion(null);
+      }
+    } catch (error) {
+      console.error("Lỗi khi xóa câu hỏi:", error);
+      alert("Xóa câu hỏi thất bại: " + error.message);
+    }
+  };
+
   const filteredQuestions = questions.filter((q) => {
     const matchesSearch = !searchQuery || 
       q.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -219,12 +299,39 @@ const QA = ({ user, onBack }) => {
                 <div className="qa-question-date">{formatTimeAgo(selectedQuestion.createdAt)}</div>
               </div>
             </div>
-            {selectedQuestion.isSolved && (
-              <div className="qa-solved-badge">
-                <CheckCircle size={16} />
-                <span>Đã giải quyết</span>
-              </div>
-            )}
+            <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
+              {selectedQuestion.isSolved && (
+                <div className="qa-solved-badge">
+                  <CheckCircle size={16} />
+                  <span>Đã giải quyết</span>
+                </div>
+              )}
+              {(selectedQuestion.userId === user?.uid || isAdmin) && (
+                <div className="qa-menu-container">
+                  <button
+                    className="qa-menu-button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setShowMenu(showMenu === selectedQuestion.id ? null : selectedQuestion.id);
+                    }}
+                    title="Tùy chọn"
+                  >
+                    <MoreVertical size={18} />
+                  </button>
+                  {showMenu === selectedQuestion.id && (
+                    <div className="qa-menu-dropdown">
+                      <button
+                        className="qa-menu-item delete-item"
+                        onClick={(e) => handleDeleteQuestion(e, selectedQuestion.id)}
+                      >
+                        <Trash2 size={16} />
+                        <span>Xóa câu hỏi</span>
+                      </button>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
           </div>
 
           <h1 className="qa-question-title">{selectedQuestion.title}</h1>
@@ -420,33 +527,64 @@ const QA = ({ user, onBack }) => {
               )}
             </div>
           ) : (
-            filteredQuestions.map((question) => (
-              <div
-                key={question.id}
-                className="qa-question-card"
-                onClick={() => setSelectedQuestion(question)}
-              >
-                <div className="qa-question-card-header">
-                  <div className="qa-question-card-meta">
-                    {question.userPhotoURL ? (
-                      <img src={question.userPhotoURL} alt={question.userName} className="qa-user-avatar-small" />
-                    ) : (
-                      <div className="qa-user-avatar-small qa-user-avatar-placeholder">
-                        <User size={12} />
+            filteredQuestions.map((question) => {
+              const isOwner = question.userId === user?.uid;
+              const canEdit = isOwner || isAdmin;
+              
+              return (
+                <div
+                  key={question.id}
+                  className="qa-question-card"
+                  onClick={() => setSelectedQuestion(question)}
+                >
+                  <div className="qa-question-card-header">
+                    <div className="qa-question-card-meta">
+                      {question.userPhotoURL ? (
+                        <img src={question.userPhotoURL} alt={question.userName} className="qa-user-avatar-small" />
+                      ) : (
+                        <div className="qa-user-avatar-small qa-user-avatar-placeholder">
+                          <User size={12} />
+                        </div>
+                      )}
+                      <div>
+                        <div className="qa-user-name-small">{question.userName}</div>
+                        <div className="qa-question-date-small">{formatTimeAgo(question.createdAt)}</div>
                       </div>
-                    )}
-                    <div>
-                      <div className="qa-user-name-small">{question.userName}</div>
-                      <div className="qa-question-date-small">{formatTimeAgo(question.createdAt)}</div>
+                    </div>
+                    <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                      {question.isSolved && (
+                        <div className="qa-solved-badge-small">
+                          <CheckCircle size={14} />
+                          <span>Đã giải quyết</span>
+                        </div>
+                      )}
+                      {canEdit && (
+                        <div className="qa-menu-container">
+                          <button
+                            className="qa-menu-button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setShowMenu(showMenu === question.id ? null : question.id);
+                            }}
+                            title="Tùy chọn"
+                          >
+                            <MoreVertical size={16} />
+                          </button>
+                          {showMenu === question.id && (
+                            <div className="qa-menu-dropdown">
+                              <button
+                                className="qa-menu-item delete-item"
+                                onClick={(e) => handleDeleteQuestion(e, question.id)}
+                              >
+                                <Trash2 size={16} />
+                                <span>Xóa câu hỏi</span>
+                              </button>
+                            </div>
+                          )}
+                        </div>
+                      )}
                     </div>
                   </div>
-                  {question.isSolved && (
-                    <div className="qa-solved-badge-small">
-                      <CheckCircle size={14} />
-                      <span>Đã giải quyết</span>
-                    </div>
-                  )}
-                </div>
                 <h3 className="qa-question-card-title">{question.title}</h3>
                 {question.location && (
                   <div className="qa-question-card-location">
@@ -461,7 +599,8 @@ const QA = ({ user, onBack }) => {
                   <span><ThumbsUp size={12} /> {question.upvotes || 0}</span>
                 </div>
               </div>
-            ))
+              );
+            })
           )}
         </div>
       )}

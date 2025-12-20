@@ -10,6 +10,7 @@ import {
   serverTimestamp,
   where,
   getDoc,
+  deleteDoc,
 } from "firebase/firestore";
 import { db, auth } from "./firebase";
 import { createNotification } from "./notifications";
@@ -303,5 +304,19 @@ export const incrementQuestionViews = async (questionId) => {
   await updateDoc(questionRef, {
     views: increment(1),
   });
+};
+
+/**
+ * Delete a question
+ * @param {string} questionId - Question ID
+ * @returns {Promise<void>}
+ */
+export const deleteQuestion = async (questionId) => {
+  if (!questionId) {
+    throw new Error("Question ID is required");
+  }
+
+  const questionRef = doc(db, "questions", questionId);
+  await deleteDoc(questionRef);
 };
 
