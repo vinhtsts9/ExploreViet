@@ -719,6 +719,7 @@ function AppContent() {
               {/* Left Sidebar */}
               <LeftSidebar
                 posts={posts}
+                user={user}
                 activeCategory={filters.category}
                 onFilterClick={(filter) => {
                   if (typeof filter === "string") {

@@ -2,25 +2,59 @@ import React from "react";
 import { TrendingUp, Filter, Tag, MapPin, Sparkles } from "lucide-react";
 import "./LeftSidebar.css";
 
-const LeftSidebar = ({ posts, onFilterClick, onTagClick, activeCategory = "" }) => {
-  // Tính toán trending destinations từ posts
+const LeftSidebar = ({ posts, onFilterClick, onTagClick, activeCategory = "", user = null }) => {
+  // Filter posts giống như logic trong App.jsx - chỉ đếm approved posts
+  const getVisiblePosts = () => {
+    return posts.filter((p) => {
+      // Show all posts for the post owner
+      if (p.userId === user?.uid) return true;
+      // Show only approved posts for other users
+      return p.status === "approved" || !p.status; // !p.status for backward compatibility
+    });
+  };
+
+  // Normalize location name để group các biến thể (ví dụ: "Hà Nội" và "Hà Nội, Việt Nam")
+  const normalizeLocationForGrouping = (location) => {
+    if (!location) return "Unknown";
+    // Lấy phần đầu tiên trước dấu phẩy, trim và lowercase
+    const parts = location.split(",");
+    return parts[0].trim().toLowerCase();
+  };
+
+  // Tính toán trending destinations từ posts đã filter
   const getTrendingDestinations = () => {
+    const visiblePosts = getVisiblePosts();
     const locationCounts = {};
-    posts.forEach((post) => {
+    
+    visiblePosts.forEach((post) => {
       const location = post.location || "Unknown";
-      locationCounts[location] = (locationCounts[location] || 0) + 1;
+      // Normalize location để group các biến thể
+      const locationKey = normalizeLocationForGrouping(location);
+      
+      if (!locationCounts[locationKey]) {
+        locationCounts[locationKey] = {
+          displayName: location.split(",")[0].trim(), // Lấy phần đầu để hiển thị
+          count: 0
+        };
+      }
+      locationCounts[locationKey].count++;
     });
 
     return Object.entries(locationCounts)
-      .sort(([, a], [, b]) => b - a)
+      .sort(([, a], [, b]) => b.count - a.count)
       .slice(0, 5)
-      .map(([location, count]) => ({ location, count }));
+      .map(([locationKey, data]) => ({ 
+        location: data.displayName, 
+        count: data.count 
+      }));
   };
 
-  // Lấy popular tags từ posts
+  // Lấy popular tags từ posts đã filter
   const getPopularTags = () => {
+    const visiblePosts = getVisiblePosts();
     const tagCounts = {};
-    posts.forEach((post) => {
+    
+    visiblePosts.forEach((post) => {
       if (post.tags && Array.isArray(post.tags)) {
         post.tags.forEach((tag) => {
           tagCounts[tag] = (tagCounts[tag] || 0) + 1;
