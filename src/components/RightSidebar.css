@@ -125,9 +125,13 @@
   font-weight: 600;
   color: #1f2937;
   font-size: 0.9375rem;
-  white-space: nowrap;
+  word-wrap: break-word;
+  word-break: break-word;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
   overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 .contributor-count {

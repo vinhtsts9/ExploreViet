@@ -105,7 +105,12 @@ const RightSidebar = ({ posts, users, onPostClick }) => {
                     </div>
                   </div>
                   <div className="contributor-info">
-                    <span className="contributor-name">{contributor.name}</span>
+                    <span 
+                      className="contributor-name" 
+                      title={contributor.name}
+                    >
+                      {contributor.name}
+                    </span>
                     <span className="contributor-count">
                       {contributor.count} bài viết
                     </span>
