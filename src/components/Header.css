@@ -415,7 +415,9 @@
   cursor: pointer;
   transition: all 0.3s ease;
   text-decoration: none;
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .login-btn-full:visited {
@@ -426,6 +428,11 @@
   background: rgba(255, 255, 255, 0.25);
   border-color: rgba(255, 255, 255, 0.5);
   transform: translateY(-2px);
+}
+
+.login-btn-full svg {
+  flex-shrink: 0;
+  margin-left: -0.25rem;
 }
 
 /* ============================================
