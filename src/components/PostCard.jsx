@@ -36,7 +36,15 @@ const formatTimeAgo = (date) => {
   return postDate.toLocaleDateString("vi-VN");
 };
 
-const PostCard = ({ post, onLike, onClick, currentUserId, currentUser, onDelete, onEdit }) => {
+const PostCard = ({
+  post,
+  onLike,
+  onClick,
+  currentUserId,
+  currentUser,
+  onDelete,
+  onEdit,
+}) => {
   const [showMenu, setShowMenu] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
   const menuRef = useRef(null);
@@ -85,15 +93,12 @@ const PostCard = ({ post, onLike, onClick, currentUserId, currentUser, onDelete,
 
   const isLiked =
     currentUserId && post.likedBy && post.likedBy.includes(currentUserId);
-  
+
   const rating = post.rating || 0;
   const ratingCount = post.ratingCount || 0;
 
   const firstImage = post.content?.find((c) => c.type === "image")?.url;
-  const coverUrl =
-    firstImage ||
-    post.imageUrl ||
-    "https://images.unsplash.com/photo-1508804185872-d7badad00f7d?auto=format&fit=crop&q=80";
+  const coverUrl = firstImage || post.imageUrl;
 
   const textBlock = post.content?.find((c) => c.type === "text");
 
@@ -105,16 +110,29 @@ const PostCard = ({ post, onLike, onClick, currentUserId, currentUser, onDelete,
           <div className="post-media post-media-video">
             <Video size={30} />
           </div>
-        ) : (
+        ) : coverUrl ? (
           <img
             src={coverUrl}
             alt={post.location}
             className="post-media post-media-image"
             onError={(e) => {
-              e.target.src =
-                "https://images.unsplash.com/photo-1508804185872-d7badad00f7d?auto=format&fit=crop&q=80";
+              e.target.style.display = "none";
             }}
           />
+        ) : (
+          <div
+            className="post-media post-media-placeholder"
+            style={{
+              backgroundColor: "#f1f5f9",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              height: "100%",
+              width: "100%",
+            }}
+          >
+            <ImageIcon size={48} color="#cbd5e1" />
+          </div>
         )}
 
         {currentUserId && (
@@ -203,7 +221,11 @@ const PostCard = ({ post, onLike, onClick, currentUserId, currentUser, onDelete,
                 <User size={14} />
               </div>
             )}
-            <span className="author-name" data-full-name={authorName} title={authorName}>
+            <span
+              className="author-name"
+              data-full-name={authorName}
+              title={authorName}
+            >
               {authorName}
             </span>
           </div>

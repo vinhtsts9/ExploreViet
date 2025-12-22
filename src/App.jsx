@@ -43,13 +43,8 @@ import { AuthProvider, useAuth } from "./contexts/AuthContext";
 import { auth, db } from "./services/firebase";
 import { fetchGeminiSuggestion } from "./services/gemini";
 import { createPost, likePost, unlikePost, deletePost } from "./services/posts";
-import { createOrUpdateUserDoc, isUserAdmin } from "./services/admin";
-import { checkAdminStatus } from "./services/adminAuth";
-import { apiPostAuth } from "./api";
+import { isUserAdmin } from "./services/admin";
 import { createDemoPost } from "./utils/createDemoPost";
-
-// Firebase
-import { signInAnonymously, onAuthStateChanged } from "firebase/auth";
 
 import {
   collection,
@@ -60,6 +55,7 @@ import {
   updateDoc,
   increment,
   serverTimestamp,
+  setDoc,
 } from "firebase/firestore";
 
 // Wrapper component for ItineraryPlanner to get itineraryId from URL
@@ -457,6 +453,45 @@ function AppContent() {
     };
   }, []);
 
+  // Sync user data to Firestore when user logs in
+  useEffect(() => {
+    if (user) {
+      const syncUserToFirestore = async () => {
+        try {
+          const userDocRef = doc(db, "users", user.uid);
+          const userDocSnap = await getDoc(userDocRef);
+
+          // Danh sách email được cấp quyền admin tự động
+          const adminEmails = ["qa662004@gmail.com"];
+          const isAdminEmail =
+            user.email && adminEmails.includes(user.email.toLowerCase());
+
+          const userData = {
+            uid: user.uid,
+            email: user.email || "",
+            displayName: user.displayName || "Người dùng",
+            photoURL: user.photoURL,
+            lastLogin: serverTimestamp(),
+          };
+
+          if (!userDocSnap.exists()) {
+            await setDoc(userDocRef, {
+              ...userData,
+              createdAt: serverTimestamp(),
+              role: isAdminEmail ? "admin" : "user",
+              isAdmin: isAdminEmail,
+            });
+          } else {
+            await updateDoc(userDocRef, userData);
+          }
+        } catch (error) {
+          console.error("Lỗi đồng bộ user sang Firestore:", error);
+        }
+      };
+      syncUserToFirestore();
+    }
+  }, [user]);
+
   // Auto return home after login
   useEffect(() => {
     if (user && location.pathname === "/login") {
@@ -582,6 +617,10 @@ function AppContent() {
     filtered = filtered.filter((p) => {
       // Show all posts for the post owner or admins
       if (p.userId === user?.uid) return true;
+
+      // Ẩn bài viết của AI nếu người dùng không nhập từ khóa tìm kiếm
+      if (p.isAiGenerated && !searchQuery?.trim()) return false;
+
       // Show only approved posts for other users
       return p.status === "approved" || !p.status; // !p.status for backward compatibility
     });
