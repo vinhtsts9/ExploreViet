@@ -6,7 +6,15 @@ import {
   useParams,
   useLocation,
 } from "react-router-dom";
-import { MapPin, Loader2, Sparkles, PlusCircle, FileText, Map, CalendarDays } from "lucide-react";
+import {
+  MapPin,
+  Loader2,
+  Sparkles,
+  PlusCircle,
+  FileText,
+  Map,
+  CalendarDays,
+} from "lucide-react";
 import "./index.css";
 import "./App.css";
 
@@ -33,10 +41,7 @@ import { ItineraryPlanner } from "./components/ItineraryPlanner";
 import { ItineraryListPage } from "./components/ItineraryListPage";
 import { AuthProvider, useAuth } from "./contexts/AuthContext";
 import { auth, db } from "./services/firebase";
-import {
-  fetchGeminiSuggestion,
-  generateRichPostContent,
-} from "./services/gemini";
+import { fetchGeminiSuggestion } from "./services/gemini";
 import { createPost, likePost, unlikePost, deletePost } from "./services/posts";
 import { createOrUpdateUserDoc, isUserAdmin } from "./services/admin";
 import { checkAdminStatus } from "./services/adminAuth";
@@ -60,30 +65,37 @@ import {
 // Wrapper component for ItineraryPlanner to get itineraryId from URL
 function ItineraryPlannerWrapper({ user, navigate }) {
   const { itineraryId } = useParams();
-  console.log("ItineraryPlannerWrapper: itineraryId from useParams:", itineraryId);
+  console.log(
+    "ItineraryPlannerWrapper: itineraryId from useParams:",
+    itineraryId
+  );
 
-  return (
-    user ? (
-      <ItineraryPlanner itineraryId={itineraryId} />
-    ) : (
-      <div className="main-content-wrapper">
-        <div className="page-header">
-          <h2>Bạn cần đăng nhập</h2>
-          <p>Vui lòng đăng nhập để tạo lịch trình</p>
-          <button
-            onClick={() => navigate("/login")}
-            className="create-first-post-button"
-          >
-            Đăng nhập
-          </button>
-        </div>
+  return user ? (
+    <ItineraryPlanner itineraryId={itineraryId} />
+  ) : (
+    <div className="main-content-wrapper">
+      <div className="page-header">
+        <h2>Bạn cần đăng nhập</h2>
+        <p>Vui lòng đăng nhập để tạo lịch trình</p>
+        <button
+          onClick={() => navigate("/login")}
+          className="create-first-post-button"
+        >
+          Đăng nhập
+        </button>
       </div>
-    )
+    </div>
   );
 }
 
 // Wrapper component for EditPost to get postId from URL
-function EditPostWrapper({ posts, user, onUpdatePost, onCancelEdit, navigate }) {
+function EditPostWrapper({
+  posts,
+  user,
+  onUpdatePost,
+  onCancelEdit,
+  navigate,
+}) {
   const { id } = useParams();
   const [isAdmin, setIsAdmin] = React.useState(false);
   const [checkingAdmin, setCheckingAdmin] = React.useState(true);
@@ -105,7 +117,10 @@ function EditPostWrapper({ posts, user, onUpdatePost, onCancelEdit, navigate }) 
       <div className="main-content-wrapper">
         <div className="page-header">
           <h2>Bài viết không tìm thấy</h2>
-          <button onClick={() => navigate("/")} className="create-first-post-button">
+          <button
+            onClick={() => navigate("/")}
+            className="create-first-post-button"
+          >
             Về trang chủ
           </button>
         </div>
@@ -122,21 +137,24 @@ function EditPostWrapper({ posts, user, onUpdatePost, onCancelEdit, navigate }) 
       </div>
     );
   }
-  
+
   const isOwner = post.userId === user?.uid;
   if (!isOwner && !isAdmin) {
     return (
       <div className="main-content-wrapper">
         <div className="page-header">
           <h2>Bạn không có quyền chỉnh sửa bài viết này</h2>
-          <button onClick={() => navigate(-1)} className="create-first-post-button">
+          <button
+            onClick={() => navigate(-1)}
+            className="create-first-post-button"
+          >
             Quay lại
           </button>
         </div>
       </div>
     );
   }
-  
+
   return (
     <EditPost
       post={post}
@@ -148,7 +166,14 @@ function EditPostWrapper({ posts, user, onUpdatePost, onCancelEdit, navigate }) 
 }
 
 // Wrapper component for PostDetail to get postId from URL
-function PostDetailWrapper({ posts, user, onLike, onPostClick, onDeletePost, onEditPost }) {
+function PostDetailWrapper({
+  posts,
+  user,
+  onLike,
+  onPostClick,
+  onDeletePost,
+  onEditPost,
+}) {
   const { id } = useParams();
   const navigate = useNavigate();
   const [post, setPost] = useState(null);
@@ -462,71 +487,35 @@ function AppContent() {
       console.log(
         "No results found for:",
         searchQuery,
-        "- Generating rich AI content from backend"
+        "- Generating AI content..."
       );
 
-      // Use new rich content generator with multiple images and text blocks
-      const richContent = await generateRichPostContent(searchQuery);
-      console.log("AI rich content response:", richContent);
+      try {
+        const aiContent = await fetchGeminiSuggestion(searchQuery);
+        if (aiContent && aiContent.content) {
+          const aiPostData = {
+            title: searchQuery,
+            location: searchQuery,
+            contents: [{ type: "text", value: aiContent.content }],
+          };
 
-      if (
-        richContent &&
-        richContent.content &&
-        richContent.content.length > 0
-      ) {
-        try {
-          // Transform rich content to createPost format
-          const aiContents = richContent.content
-            .map((block) => {
-              if (block.type === "text") {
-                return {
-                  type: "text",
-                  value: block.content,
-                };
-              } else if (block.type === "image") {
-                return {
-                  type: "image",
-                  value: block.url,
-                  caption: block.caption || "",
-                };
-              }
-              return null;
-            })
-            .filter(Boolean);
+          const aiUser = {
+            uid: "gemini_ai",
+            displayName: "✨ AI Travel Guide",
+            photoURL: null,
+          };
 
-          if (aiContents.length === 0) {
-            // Fallback to old method if rich content failed
-            const aiContent = await fetchGeminiSuggestion(searchQuery);
-            if (aiContent) {
-              aiContents.push({ type: "text", value: aiContent.content });
-            }
-          }
-
-          if (aiContents.length > 0) {
-            const aiPostData = {
-              title: richContent.title || searchQuery,
-              location: richContent.location || searchQuery,
-              contents: aiContents,
-            };
-
-            // Create with AI user identity
-            const aiUser = {
-              uid: "gemini_ai",
-              displayName: "✨ AI Travel Guide",
-              photoURL: null,
-            };
-
-            console.log("Creating rich AI post with data:", aiPostData);
-            await createPost(aiPostData, "gemini_ai", aiUser, true);
-            console.log("AI-generated rich post created successfully");
-          }
-        } catch (err) {
-          console.error("Failed to create AI post:", err);
+          console.log("Creating AI post with data:", aiPostData);
+          await createPost(aiPostData, "gemini_ai", aiUser, true);
+          console.log("AI-generated post created successfully.");
+        } else {
+          console.log("AI returned no content for:", searchQuery);
         }
-      } else {
-        console.log("AI returned no content for:", searchQuery);
+      } catch (err) {
+        console.error("Failed to generate or create AI post:", err);
+      } finally {
+        setIsSearchingAi(false);
       }
-      setIsSearchingAi(false);
     }
   };
 
@@ -602,8 +591,15 @@ function AppContent() {
       const q = searchQuery.toLowerCase().trim();
       filtered = filtered.filter((p) => {
         // Ưu tiên exact match với location (case-insensitive)
-        const locationLower = (p.location_lowercase || p.location?.toLowerCase() || "").trim();
-        const exactLocationMatch = locationLower === q || locationLower.startsWith(q + ",") || locationLower.startsWith(q + " ");
+        const locationLower = (
+          p.location_lowercase ||
+          p.location?.toLowerCase() ||
+          ""
+        ).trim();
+        const exactLocationMatch =
+          locationLower === q ||
+          locationLower.startsWith(q + ",") ||
+          locationLower.startsWith(q + " ");
         const inLocation = exactLocationMatch || locationLower.includes(q);
         const inTitle = p.title?.toLowerCase().includes(q);
         return inLocation || inTitle;
@@ -740,7 +736,14 @@ function AppContent() {
                   setSelectedUserId(null); // Clear user filter when filtering by location/category
                   if (typeof filter === "string") {
                     // Kiểm tra xem có phải là category hợp lệ không
-                    const validCategories = ["beach", "mountain", "culture", "food", "adventure", "relax"];
+                    const validCategories = [
+                      "beach",
+                      "mountain",
+                      "culture",
+                      "food",
+                      "adventure",
+                      "relax",
+                    ];
                     if (validCategories.includes(filter)) {
                       setFilters((prev) => ({ ...prev, category: filter }));
                     } else {
@@ -767,12 +770,12 @@ function AppContent() {
                   </div>
                 )}
 
-                <Filter 
+                <Filter
                   onFilterChange={(newFilters) => {
                     setSelectedUserId(null); // Clear user filter when other filters change
                     setFilters(newFilters);
-                  }} 
-                  posts={posts} 
+                  }}
+                  posts={posts}
                 />
 
                 {loading ? (
@@ -849,7 +852,10 @@ function AppContent() {
               <div className="main-content-wrapper">
                 <div className="page-header">
                   <h2>Bạn cần đăng nhập</h2>
-                  <button onClick={() => navigate("/login")} className="create-first-post-button">
+                  <button
+                    onClick={() => navigate("/login")}
+                    className="create-first-post-button"
+                  >
                     Đăng nhập
                   </button>
                 </div>

@@ -88,6 +88,23 @@ export const createPost = async (
     throw new Error("User ID is required");
   }
 
+  // Nếu là bài viết AI, kiểm tra xem đã có bài viết AI nào cho địa điểm này chưa
+  // Người dùng thường (isAiGenerated = false) vẫn có thể tạo thoải mái
+  if (isAiGenerated) {
+    const q = query(
+      collection(db, "posts"),
+      where("isAiGenerated", "==", true),
+      where("location_lowercase", "==", location.toLowerCase())
+    );
+    const snapshot = await getDocs(q);
+    if (!snapshot.empty) {
+      console.log(
+        `⚠️ AI post for location "${location}" already exists. Skipping creation.`
+      );
+      return snapshot.docs[0].id; // Trả về ID của bài viết đã tồn tại
+    }
+  }
+
   // Transform contents to Firestore format
   const firestoreContents = contents.map((block) => {
     if (block.type === "text") {
@@ -124,7 +141,7 @@ export const createPost = async (
     likedBy: [], // Array of user IDs who liked this post
     commentCount: 0,
     isAiGenerated: isAiGenerated,
-    status: "pending", // Added status for post moderation (pending, approved, rejected)
+    status: isAiGenerated ? "approved" : "pending", // AI posts are auto-approved
     createdAt: serverTimestamp(),
     updatedAt: serverTimestamp(),
   };
